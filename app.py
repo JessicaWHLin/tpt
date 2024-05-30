@@ -2,7 +2,7 @@ from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
 from getData import get_data
 import mysql.connector
-from pydantic import BaseModel
+from mysql.connector import pooling
 import json
 app=FastAPI()
 db={
