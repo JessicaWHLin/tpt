@@ -90,6 +90,9 @@ async def rankMrts(request:Request):
 	connection3.close()
 	return{"data":result_mrts}
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=9000)
 #函式區	
 def output_pages(results,results_page,page):
 	for i in range(len(results)):
