@@ -5,6 +5,7 @@ import mysql.connector
 from mysql.connector import pooling
 import json
 import os
+import uvicorn
 
 app=FastAPI()
 get_data()
