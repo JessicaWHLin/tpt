@@ -1,21 +1,30 @@
 import mysql.connector
+import mysql.connector.pooling
 import json
 import os
 import re
-
-def get_data():
+from mysql.connector import Error
+# db={}
+def get_mysql_connection():
+	# 從環境變數中獲取 MySQL 連接參數
+	host = os.getenv('MYSQL_HOST')
+	user = os.getenv('MYSQL_USER')
+	password = os.getenv('MYSQL_PASSWORD')
+	database = os.getenv('MYSQL_DATABASE')
 	db={
-		"host":"localhost",
-		"user":"test2",
-		"password":"1234",
-		"database":"tpt"
+		"host":host,
+		"user":user,
+		"password":password,
+		"database":database
 	}
+	return db
+def get_data():
+	db=get_mysql_connection()
 	pool=mysql.connector.pooling.MySQLConnectionPool(
 		pool_name="myPool",
 		pool_size=5,
 		**db
 	)
-
 	current_path=os.path.dirname(os.path.abspath(__file__))
 	f_path=os.path.join(current_path,'data','taipei-attractions.json')
 	with open(f_path, mode="r",encoding='utf-8') as f:
@@ -43,13 +52,10 @@ def get_data():
 		sql1="insert into att(id,name,category,description,address,transport,mrt,lat,lng,images)values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 		val1=(attractions)
 		cursor.executemany(sql1,val1)
-
-	# sql_id="select id from att"
-	# cursor.execute(sql_id)
-	# results=cursor.fetchall()
-	# print(results)
 	connection.commit()
 	cursor.close()
 	connection.close()
 
 # get_data()
+# get_mysql_connection()
+# print(get_mysql_connection())

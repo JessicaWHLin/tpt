@@ -1,22 +1,19 @@
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
-from getData import get_data
+from getData import get_data,get_mysql_connection
 import mysql.connector
 from mysql.connector import pooling
 import json
+import os
+
 app=FastAPI()
-db={
-		"host":"localhost",
-		"user":"test2",
-		"password":"1234",
-		"database":"tpt"
-	}
+get_data()
+db=get_mysql_connection()
 pool=mysql.connector.pooling.MySQLConnectionPool(
 		pool_name="myPool",
 		pool_size=5,
 		**db
 	)
-get_data()
 
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
@@ -40,8 +37,8 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.get("/api/attractions",response_class=JSONResponse)
 async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 	results_page=[]
-	connection=pool.get_connection()
-	cursor=connection.cursor(dictionary=True)
+	connection1=pool.get_connection()
+	cursor=connection1.cursor(dictionary=True)
 	if(keyword):
 		sql_keyword="select * from att where mrt= %s or name like %s"
 		val_keyword=(keyword,('%'+keyword+'%'))
@@ -56,15 +53,15 @@ async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 		output_pages(results_all,results_page,page)
 
 	cursor.close()
-	connection.close()		
+	connection1.close()		
 	return {"nextPage":page+1,"data":results_page}
 
 
 @app.get("/api/attraction/{attractionId}",response_class=JSONResponse)
 async def attractionId(request:Request, attractionId:int):
 	results_page=[]
-	connection=pool.get_connection()
-	cursor=connection.cursor(dictionary=True)
+	connection2=pool.get_connection()
+	cursor=connection2.cursor(dictionary=True)
 	sql_id="select * from att where id =%s"
 	val_id=(attractionId,)
 	cursor.execute(sql_id,val_id)
@@ -75,13 +72,13 @@ async def attractionId(request:Request, attractionId:int):
 	else:
 		output_pages(results_id,results_page,0)
 		cursor.close()
-		connection.close()
+		connection2.close()
 		return{"data":results_page}
 
 @app.get("/api/mrts",response_class=JSONResponse)
 async def rankMrts(request:Request):
-	connection=pool.get_connection()
-	cursor=connection.cursor(dictionary=True)
+	connection3=pool.get_connection()
+	cursor=connection3.cursor(dictionary=True)
 	sql_query="select mrt from att group by mrt order by count(*) desc;"
 	cursor.execute(sql_query)
 	result_mrt=cursor.fetchall()
@@ -89,7 +86,7 @@ async def rankMrts(request:Request):
 	for i in range(len(result_mrt)):
 		result_mrts.append(result_mrt[i]["mrt"])
 	cursor.close()
-	connection.close()
+	connection3.close()
 	return{"data":result_mrts}
 
 #函式區	
