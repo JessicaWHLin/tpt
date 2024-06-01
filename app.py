@@ -41,21 +41,27 @@ async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 	connection1=pool.get_connection()
 	cursor=connection1.cursor(dictionary=True)
 	if(keyword):
-		sql_keyword="select * from att where mrt= %s or name like %s"
-		val_keyword=(keyword,('%'+keyword+'%'))
+		sql_keyword="select * from (select * from att where mrt= %s or name like %s) as subquery limit %s offset %s"
+		val_keyword=(keyword,('%'+keyword+'%'),12,(page*12))
 		cursor.execute(sql_keyword,val_keyword)
 		results_keyword=cursor.fetchall()
-		output_pages(results_keyword,results_page,page)
+		results_page=output_pages(results_keyword,1)
+		
 		
 	else:
-		sql_attractions="select * from att"
-		cursor.execute(sql_attractions)
+		sql_attractions="select * from att limit %s offset %s"
+		val_attractions=(12,(page*12))
+		cursor.execute(sql_attractions,val_attractions)
 		results_all=cursor.fetchall()
-		output_pages(results_all,results_page,page)
-
+		results_page=output_pages(results_all,1)
+	
+	if len(results_page)<12:
+			nextpage=None
+	else:
+		nextpage=page+1
 	cursor.close()
-	connection1.close()		
-	return {"nextPage":page+1,"data":results_page}
+	connection1.close()	
+	return {"nextPage":nextpage,"data":results_page}
 
 
 @app.get("/api/attraction/{attractionId}",response_class=JSONResponse)
@@ -66,12 +72,13 @@ async def attractionId(request:Request, attractionId:int):
 	sql_id="select * from att where id =%s"
 	val_id=(attractionId,)
 	cursor.execute(sql_id,val_id)
-	results_id=cursor.fetchall()
-	# print(results_id)
-	if results_id == []:
+	results_id=cursor.fetchone()
+	print(results_id)
+	print(results_id)
+	if results_id == None:
 		return JSONResponse(status_code=400,content={"error": True,"message":"景點編號不正確"})
 	else:
-		output_pages(results_id,results_page,0)
+		results_page=output_pages(results_id,0)
 		cursor.close()
 		connection2.close()
 		return{"data":results_page}
@@ -92,18 +99,14 @@ async def rankMrts(request:Request):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=9000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 #函式區	
-def output_pages(results,results_page,page):
-	for i in range(len(results)):
-		if (i+1)%12==0:
-			results[i]["current_page"]=((i+1)//12)-1
-		else:
-			results[i]["current_page"]=(i+1)//12
-
-	for i in range(len(results)):
-		image_urls=json.loads(results[i]["images"])
-		if results[i]["current_page"]==page:
+def output_pages(results,case):
+	# print(len(results))
+	results_page=[]
+	if case==1:
+		for i in range(len(results)):
+			image_urls=json.loads(results[i]["images"])
 			attractions={
 				"id":results[i]["id"],
 				"name":results[i]["name"],
@@ -117,4 +120,21 @@ def output_pages(results,results_page,page):
 				"images":image_urls["image"]
 			}
 			results_page.append(attractions)
+	else:
+		image_urls=json.loads(results["images"])
+		attractions={
+				"id":results["id"],
+				"name":results["name"],
+				"category":results["category"],
+				"description":results["description"],
+				"address":results["address"],
+				"transport":results["transport"],
+				"mrt":results["mrt"],
+				"lat":results["lat"],
+				"lng":results["lng"],
+				"images":image_urls["image"]
+		}
+		results_page=attractions	
+		
 	return results_page
+	# return results
