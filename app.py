@@ -3,11 +3,12 @@ from fastapi.responses import FileResponse, JSONResponse
 from getData import get_data,get_mysql_connection
 import mysql.connector
 from mysql.connector import pooling
+from fastapi.staticfiles import StaticFiles
 import json
 import os
-import uvicorn
 
 app=FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 get_data()
 db=get_mysql_connection()
 pool=mysql.connector.pooling.MySQLConnectionPool(
