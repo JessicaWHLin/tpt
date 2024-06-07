@@ -24,6 +24,7 @@ html,body{
 	position:sticky;
 	top:0px;
 	z-index: 1000;
+	margin:0 auto;
 }
 
 .title{
@@ -49,7 +50,7 @@ html,body{
 	font-weight:500;
 	font-size:16px;
 	height:34px;
-	padding:10px;
+	padding:5px;
 	color:#666666;
 	border:none;
 	background:none;
@@ -70,7 +71,6 @@ button.Btn:hover {
 	background:url(image/welcome.png),linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);;
 	background-size:cover;
 	background-repeat:no-repeat;
-	background-position:center;
 
 }
 .slogan{
@@ -78,6 +78,7 @@ button.Btn:hover {
 	height:169px;
 	padding:10px;
 	gap:10px;
+	margin:0 auto;
 }
 .h1_Titles{
 	color:rgba(248, 248, 248, 1);
@@ -122,6 +123,7 @@ img#searchBtn:hover{
 	width:1920px;
 	height:966px;
 	padding:40px 0px;
+	margin:0 auto;
 }
 .list_bar{
 	position:relative;
@@ -206,9 +208,9 @@ div.list_items:hover{
 	width: 1200px;
 	grid-template-columns: repeat(4,1fr);
 	height: 816px;
-	padding: 15px 0px 0px 15px;
+	padding: 15px 15px;
 	margin:0 auto;
-	gap:15px;
+	gap:30px;
 }
 .att{
 	position: relative;
@@ -303,7 +305,7 @@ div.list_items:hover{
 
 @media(max-width:1920px){
 	.title{
-		width: 100%;
+		width: 90%;
 	}
 	.hero_section{
 		width: 100%;
@@ -312,25 +314,29 @@ div.list_items:hover{
 		width: 100%;
 	}
 	.slogan{
-		width:100%;
+		width:90%;
 	}
 	.main{
 		flex-wrap: wrap;
 		height: 100%;
-		width: 100%;
+		width: 90%;
 	}
 	.list_bar{
 		width: 100%;
 	}
 	.attractions{
 		height:100%;
+		width: 100%;
+	}
+	.att{
+		width: 100%;
 	}
 	.footer{
 		width: 100%;
 	}
 }
 
-@media(max-width:1200px){
+@media(max-width:1150px){
 	.search_bar{
 		width:100%;
 	}
@@ -356,12 +362,16 @@ div.list_items:hover{
 }
 
 @media(max-width:400px){
+	.title{
+		width: 100%;
+		padding:0 10px;
+	}
 	.search_bar_input{
 		width:auto;
 	}
 	.attractions{
 		display:grid;
-		width: 90%;
+		width: 100%;
 		grid-template-columns: 1fr;
 	}
 
