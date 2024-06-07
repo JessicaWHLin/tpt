@@ -85,7 +85,7 @@ async def attractionId(request:Request, attractionId:int):
 async def rankMrts(request:Request):
 	connection3=pool.get_connection()
 	cursor=connection3.cursor(dictionary=True)
-	sql_query="select mrt from att group by mrt order by count(*) desc;"
+	sql_query="select mrt from att where mrt is not null group by mrt order by count(*) desc;"
 	cursor.execute(sql_query)
 	result_mrt=cursor.fetchall()
 	result_mrts=[]
