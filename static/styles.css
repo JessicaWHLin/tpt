@@ -229,6 +229,7 @@ div.list_items:hover{
 	height: 197px;
 	background: rgba(196, 196, 196, 1);
 	border-radius: 5px 5px 5px 5px;
+	object-fit: cover;
 }
 /* .mask{
 	position: absolute;
