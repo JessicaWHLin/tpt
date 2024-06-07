@@ -107,11 +107,14 @@ function load_attractions_more(page,keyword=''){
 					observer.observe(newTarget);
 				}
 			});	
-		}else{ observer.disconnect;}		
+		}else{ observer.disconnect();}		
 	}
 	let observer=new IntersectionObserver(callback,option);
 	let attbox=document.querySelector("div.att:nth-last-child(1)");
-	observer.observe(attbox);
+	if(attbox){
+		observer.observe(attbox);
+	}
+	
 }
 
 function query(keyword){
