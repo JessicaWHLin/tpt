@@ -2,7 +2,6 @@
 // list bar
 //點擊mrt list→跳搜尋框
 document.addEventListener("DOMContentLoaded",()=>{
-
 	url="/api/mrts";
 	fetch(url).then((e)=>{
 		return e.json();
@@ -41,21 +40,25 @@ right_arrow.addEventListener("click",()=>{
 });
 
 //attractions沒有關鍵詞的時候
-let page=0;
-url="/api/attractions?page="+page;
-fetch(url,request={"page":page}).then(e=>{return e.json();}).then((data)=>{
-	page=data.nextPage;
-	let attractions=data.data;
-	load_attractions(attractions);
-	load_attractions_more(page);
+document.addEventListener("DOMContentLoaded",()=>{
+	let page=0;
+	url="/api/attractions?page="+page;
+	fetch(url,request={"page":page}).then(e=>{return e.json();}).then((data)=>{
+		page=data.nextPage;
+		let attractions=data.data;
+		load_attractions(attractions);
+		load_attractions_more(page);
+	});
 });
 
 //搜尋框
-let searchBtn=document.querySelector("#searchBtn");
-searchBtn.addEventListener('click',()=>{
-	let searchBar=document.querySelector("#search");
-	let keyword=searchBar.value;
-	query(keyword);
+document.addEventListener("DOMContentLoaded",()=>{
+	let searchBtn=document.querySelector("#searchBtn");
+	searchBtn.addEventListener('click',()=>{
+		let searchBar=document.querySelector("#search");
+		let keyword=searchBar.value;
+		query(keyword);
+	});
 });
 
 
