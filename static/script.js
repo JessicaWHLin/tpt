@@ -94,8 +94,10 @@ function load_attractions(data){
 
 function load_attractions_more(page,keyword=''){
 	const option = {threshold: 1.0};
+	let isloading =false;
 	let callback=(entries,observer)=>{	
-		if(entries[0].isIntersecting){
+		if(entries[0].isIntersecting && ! isloading){
+			isloading=true;
 			url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
 			fetch(url,request={"page":page,"keyword":keyword}).then(e=>{return e.json();}).then((data)=>{
 				page=data.nextPage;
@@ -106,15 +108,16 @@ function load_attractions_more(page,keyword=''){
 				if(newTarget && page !=null){
 					observer.observe(newTarget);
 				}else{ observer.disconnect();}	
-			});	
+			}).finally(()=>{
+				isloading=false;
+				});	
 		}	
 	}
 	let observer=new IntersectionObserver(callback,option);
 	let attbox=document.querySelector("div.att:nth-last-child(1)");
 	if(attbox){
 		observer.observe(attbox);
-	}
-	
+	}	
 }
 
 function query(keyword){
