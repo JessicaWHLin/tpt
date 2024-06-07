@@ -32,7 +32,7 @@ CREATE TABLE `att` (
   `mrt` varchar(255) DEFAULT NULL,
   `lat` double DEFAULT NULL,
   `lng` double DEFAULT NULL,
-  `images` json DEFAULT NULL,
+  `images` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -48,6 +48,36 @@ INSERT INTO `att` VALUES (1,'新北投溫泉區','養生溫泉','北投溫泉從
 UNLOCK TABLES;
 
 --
+-- Table structure for table `attractions`
+--
+
+DROP TABLE IF EXISTS `attractions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `attractions` (
+  `id` smallint NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
+  `description` text,
+  `address` varchar(255) DEFAULT NULL,
+  `transport` varchar(255) DEFAULT NULL,
+  `mrt` varchar(255) DEFAULT NULL,
+  `lat` float DEFAULT NULL,
+  `lng` float DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `attractions`
+--
+
+LOCK TABLES `attractions` WRITE;
+/*!40000 ALTER TABLE `attractions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `attractions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `example_table`
 --
 
@@ -56,7 +86,7 @@ DROP TABLE IF EXISTS `example_table`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `example_table` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `data` json DEFAULT NULL,
+  `data` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -106,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-30 16:25:31
+-- Dump completed on 2024-06-07 13:00:41
