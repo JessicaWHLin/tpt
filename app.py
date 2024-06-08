@@ -3,11 +3,12 @@ from fastapi.responses import FileResponse, JSONResponse
 from getData import get_data,get_mysql_connection
 import mysql.connector
 from mysql.connector import pooling
+from fastapi.staticfiles import StaticFiles
 import json
 import os
-import uvicorn
 
 app=FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 get_data()
 db=get_mysql_connection()
 pool=mysql.connector.pooling.MySQLConnectionPool(
@@ -46,7 +47,7 @@ async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 		cursor.execute(sql_keyword,val_keyword)
 		results_keyword=cursor.fetchall()
 		results_page=output_pages(results_keyword,1)
-		
+		nextpage=findNextPage(results_page,sql_keyword,page,cursor,keyword)	
 		
 	else:
 		sql_attractions="select * from att limit %s offset %s"
@@ -54,11 +55,8 @@ async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 		cursor.execute(sql_attractions,val_attractions)
 		results_all=cursor.fetchall()
 		results_page=output_pages(results_all,1)
+		nextpage=findNextPage(results_page,sql_attractions,page,cursor,keyword)
 	
-	if len(results_page)<12:
-			nextpage=None
-	else:
-		nextpage=page+1
 	cursor.close()
 	connection1.close()	
 	return {"nextPage":nextpage,"data":results_page}
@@ -87,7 +85,7 @@ async def attractionId(request:Request, attractionId:int):
 async def rankMrts(request:Request):
 	connection3=pool.get_connection()
 	cursor=connection3.cursor(dictionary=True)
-	sql_query="select mrt from att group by mrt order by count(*) desc;"
+	sql_query="select mrt from att where mrt is not null group by mrt order by count(*) desc;"
 	cursor.execute(sql_query)
 	result_mrt=cursor.fetchall()
 	result_mrts=[]
@@ -135,6 +133,20 @@ def output_pages(results,case):
 				"images":image_urls["image"]
 		}
 		results_page=attractions	
-		
 	return results_page
 	# return results
+def findNextPage(results_page,sql,page,cursor,keyword):
+	if len(results_page)<12:
+			result=None
+	else:
+		if(keyword):
+			val_nextpage_check=(keyword,('%'+keyword+'%'),1,(page+1)*12)
+		else:
+			val_nextpage_check=(1,(page+1)*12)
+		cursor.execute(sql,val_nextpage_check)
+		result_nextpage_check=cursor.fetchone()
+		if len(result_nextpage_check) ==0:
+			result=None
+		else:
+			result=page+1
+	return result
