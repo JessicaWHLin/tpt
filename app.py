@@ -71,8 +71,7 @@ async def attractionId(request:Request, attractionId:int):
 	val_id=(attractionId,)
 	cursor.execute(sql_id,val_id)
 	results_id=cursor.fetchone()
-	print(results_id)
-	print(results_id)
+	# print(results_id)
 	if results_id == None:
 		return JSONResponse(status_code=400,content={"error": True,"message":"景點編號不正確"})
 	else:

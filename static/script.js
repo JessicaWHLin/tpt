@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 			mrtContainer.appendChild(mrtName);
 			mrtName.addEventListener('click',()=>{
 				let searchBar=document.querySelector("#search");
-				console.log("mrtName.textContent="+mrtName.textContent);
+				// console.log("mrtName.textContent="+mrtName.textContent);
 				searchBar.value=mrtName.textContent;
 				query(mrtName.textContent);
 			});	
@@ -30,15 +30,16 @@ let scrollPosition=0;
 let mrtContainer=document.querySelector(".list_container");
 left_arrow.addEventListener("click",()=>{
 	scrollPosition=Math.min(scrollPosition+itemWidth,0);
+	// console.log("scrollPosition="+scrollPosition);
 	mrtContainer.style.transform=`translateX(${scrollPosition}px)`;
 });
 right_arrow.addEventListener("click",()=>{
 	let maxScroll=-mrtContainer.scrollWidth+mrtContainer.clientWidth;
+	// console.log("maxScroll="+maxScroll);
 	scrollPosition=Math.max(scrollPosition-itemWidth,maxScroll);
 	// console.log("scrollPosition="+scrollPosition);
 	mrtContainer.style.transform=`translateX(${scrollPosition}px)`;
 });
-
 //attractions沒有關鍵詞的時候
 document.addEventListener("DOMContentLoaded",()=>{
 	let page=0;
@@ -89,12 +90,20 @@ function load_attractions(data){
 		attMrt.textContent=data[i]["mrt"];
 		attCategory.textContent=data[i]["category"]
 		attractions_frame.appendChild(attBox);
+		//同步設定點擊事件取得attractionId
+		attBox.addEventListener('click',()=>{
+			let attractionId=data[i]["id"]
+			localStorage.setItem("attractionId",attractionId);
+			console.log("attractionId=",+data[i]["id"]);
+			location.href="/attraction/"+attractionId;
+		});
+
 	}
 }
 
 function load_attractions_more(page,keyword=''){
 	const option = {threshold: 1.0};
-	let isloading =false;
+	let isloading =false; //flag
 	let callback=(entries,observer)=>{	
 		if(entries[0].isIntersecting && ! isloading){
 			isloading=true;
@@ -109,15 +118,13 @@ function load_attractions_more(page,keyword=''){
 					observer.observe(newTarget);
 				}else{ observer.disconnect();}	
 			}).finally(()=>{
-				isloading=false;
+				isloading=false;//flag
 				});	
 		}	
 	}
 	let observer=new IntersectionObserver(callback,option);
 	let attbox=document.querySelector("div.att:nth-last-child(1)");
-	if(attbox){
-		observer.observe(attbox);
-	}	
+	if(attbox){ observer.observe(attbox);}	
 }
 
 function query(keyword){
@@ -138,3 +145,11 @@ function query(keyword){
 	});
 	
 }
+//回首頁
+let homePage=document.querySelector(".home");
+homePage.addEventListener("click",()=>{
+	url="/";
+	fetch(url).then(response=>response)	.then(data=>{
+	 location.href=url;
+    }).catch(error=>console.error("Error:", error));
+});
