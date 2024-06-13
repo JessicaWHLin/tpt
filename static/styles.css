@@ -20,7 +20,7 @@ html,body{
 	width:auto;
 	height:54px;
 	background-color: #FFFFFF;
-	position:sticky;
+	position:fixed;
 	padding:15px 0px 0px 0px;
 	z-index: 1000;
 }
