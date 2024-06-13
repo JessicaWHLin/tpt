@@ -516,7 +516,7 @@ div.list_items:hover{
 }
 .sectionInfo{
 	width: 1200px;
-	height: 400px;
+	height: 100%;
 	top: 94px;
 	left: 360px;
 	padding: 20px 15px;
@@ -640,7 +640,7 @@ div.list_items:hover{
 	.main{
 		flex-wrap: wrap;
 		height: 100%;
-		width: 90%;
+		width: 100%;
 	}
 	.att{
 		width: 100%;
@@ -649,6 +649,9 @@ div.list_items:hover{
 }
 
 @media(max-width:1250px){
+	.main{
+		width: 90%;
+	}
 	.title{
 		width: 90%;
 	}
