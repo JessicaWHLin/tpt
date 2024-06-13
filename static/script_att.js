@@ -16,7 +16,10 @@ changeObsever.addEventListener("change",(event)=>{
 });
 
 //load attraction to sectionInfo
-let attractionId=localStorage.getItem("attractionId");
+// let attractionId=localStorage.getItem("attractionId");
+let path=window.location.pathname;
+let pathSegments=path.split('/');
+let attractionId=pathSegments[pathSegments.length-1];
 url="/api/attraction/"+attractionId;
 fetch(url).then(e=>{
 	return e.json();

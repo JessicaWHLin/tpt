@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded",()=>{
 			mrtContainer.appendChild(mrtName);
 			mrtName.addEventListener('click',()=>{
 				let searchBar=document.querySelector("#search");
-				// console.log("mrtName.textContent="+mrtName.textContent);
 				searchBar.value=mrtName.textContent;
 				query(mrtName.textContent);
 			});	
@@ -30,14 +29,11 @@ let scrollPosition=0;
 let mrtContainer=document.querySelector(".list_container");
 left_arrow.addEventListener("click",()=>{
 	scrollPosition=Math.min(scrollPosition+itemWidth,0);
-	// console.log("scrollPosition="+scrollPosition);
 	mrtContainer.style.transform=`translateX(${scrollPosition}px)`;
 });
 right_arrow.addEventListener("click",()=>{
 	let maxScroll=-mrtContainer.scrollWidth+mrtContainer.clientWidth;
-	// console.log("maxScroll="+maxScroll);
 	scrollPosition=Math.max(scrollPosition-itemWidth,maxScroll);
-	// console.log("scrollPosition="+scrollPosition);
 	mrtContainer.style.transform=`translateX(${scrollPosition}px)`;
 });
 //attractions沒有關鍵詞的時候
@@ -60,6 +56,15 @@ document.addEventListener("DOMContentLoaded",()=>{
 		let keyword=searchBar.value;
 		query(keyword);
 	});
+});
+
+//回首頁
+let homePage=document.querySelector(".home");
+homePage.addEventListener("click",()=>{
+	url="/";
+	fetch(url).then(response=>response)	.then(data=>{
+	 location.href=url;
+    }).catch(error=>console.error("Error:", error));
 });
 
 
@@ -93,8 +98,6 @@ function load_attractions(data){
 		//同步設定點擊事件取得attractionId
 		attBox.addEventListener('click',()=>{
 			let attractionId=data[i]["id"]
-			localStorage.setItem("attractionId",attractionId);
-			console.log("attractionId=",+data[i]["id"]);
 			location.href="/attraction/"+attractionId;
 		});
 
@@ -145,11 +148,4 @@ function query(keyword){
 	});
 	
 }
-//回首頁
-let homePage=document.querySelector(".home");
-homePage.addEventListener("click",()=>{
-	url="/";
-	fetch(url).then(response=>response)	.then(data=>{
-	 location.href=url;
-    }).catch(error=>console.error("Error:", error));
-});
+
