@@ -15,14 +15,16 @@ html,body{
 }
 
 .navigation{
-	/* justify-content:center;
-    align-items:center; */
 	width:auto;
 	height:54px;
 	background-color: #FFFFFF;
 	position:fixed;
 	padding:15px 0px 0px 0px;
 	z-index: 1000;
+	margin-bottom: 94px;
+}
+.navigation_placeholder{
+	height:54px;
 }
 
 .title{
