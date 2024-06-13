@@ -324,16 +324,7 @@ div.list_items:hover{
 	padding:40px 15px;
 	justify-content: space-between;
 }
-.picture_current{
-	flex:none;
-	width: 540px;
-	height: 400px;
-	left: 15px;
-	gap: 0px;
-	border-radius: 5px ;
-	background-color: #337788;
-	object-fit: cover;
-}
+
 .profile{
 	flex:none;
 	position: relative;
@@ -399,7 +390,7 @@ div.list_items:hover{
 .field_date{
 	display: flex;
 	align-items: center;
-	position: relative;
+	position: absolute;
 	width: 95%;
 	height: 35px;
 	top: 100px;
@@ -411,7 +402,7 @@ div.list_items:hover{
 	position: absolute;
 	width: 95%;
 	height: 22px;
-	top: 141px;
+	top: 151px;
 	left: 20px;
 }
 .field_price{
@@ -419,7 +410,7 @@ div.list_items:hover{
 	position:absolute;
 	width: 95%;
 	height: 22px;
-	top: 178px;
+	top: 188px;
 	left: 20px;
 }
 
@@ -512,7 +503,7 @@ div.list_items:hover{
 	position: absolute;
 	width: 154px;
 	height: 36px;
-	top: 225px;
+	top: 235px;
 	left: 20px;
 	border-radius: 5px;
 	border:none;
@@ -553,6 +544,86 @@ div.list_items:hover{
 	padding-top:10px;
 }
 
+/* attraction的圖片設定*/
+.picture_current{
+	flex:none;
+	width: 540px;
+	height: 400px;
+	gap: 0px;
+	border-radius: 5px ;
+	background-color:gainsboro;
+	display:flex;
+	position:relative;
+}
+.slideshow{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.mySlides{
+	width:100%;
+	height: 100%;
+	display:none;
+	position: absolute;
+}
+.fade{ /* 換圖片的動畫效果*/ 
+	animation-name:fade;
+	animation-duration:1.5s;
+}
+@keyframes fade{
+	from{opacity: 0.4} to {opacity:1.0}
+}
+
+.arrow_container_img{
+	width: 36px;
+	height: 36px;
+	gap: 0px;
+	cursor: pointer;
+	transition: 0.6s ease;
+	z-index: 1;
+}
+.arrow_container_img.left{
+	position: absolute;
+	top: 50%;
+	left: 10px;
+}
+.arrow_container_img.right{
+	position: absolute;
+	top: 50%;
+	right: 10px;
+}
+.img_arrow{
+	opacity:50%;
+}
+.img_arrow:hover{
+	opacity:100%;
+}
+.circle_wrapper{
+	position:absolute;
+	width: max-content;
+	height: 12px;
+	bottom: 3%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1;
+}
+.circle{
+	width: 12px;
+	height: 12px;
+	left: 48px;
+	margin: 0px 6px;
+	gap: 10px;
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 50%;
+	cursor:pointer;
+	display:inline-block;
+	transition: background-color 0.6s ease;
+}
+.active, .circle:hover{
+	background-color:rgba(0, 0, 0, 0.75);
+	border: 1px solid rgba(255, 255, 255, 0.75);
+}
 
 
 /* 視窗大小調整區 */
@@ -640,6 +711,9 @@ div.list_items:hover{
 		width:calc(100% - 30px);
 		margin:20px auto;
 	}
+	.bookingForm{
+		width: 100%;
+	}
 
 }
 
@@ -655,6 +729,9 @@ div.list_items:hover{
 		display:grid;
 		width: 100%;
 		grid-template-columns: 1fr;
+	}
+	.input_date{
+		width:auto;
 	}
 
 }
