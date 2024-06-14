@@ -16,15 +16,14 @@ html,body{
 
 .navigation{
 	width:auto;
-	height:54px;
+	height:59px;
 	background-color: #FFFFFF;
 	position:fixed;
 	padding:15px 0px 0px 0px;
 	z-index: 1000;
-	margin-bottom: 94px;
 }
 .navigation_placeholder{
-	height:54px;
+	height:59px;
 }
 
 .title{
@@ -38,8 +37,10 @@ html,body{
 	font-weight:bolder;
 	color:#448899;
 	line-height:30px;
-	margin:0 auto;
+	margin:0 auto 5px auto;
 }
+
+
 .home:hover{
 	cursor:pointer;
 	text-decoration: underline; /* 可選：停下时有下畫線效果 */
@@ -55,7 +56,7 @@ html,body{
 	font-weight:500;
 	font-size:16px;
 	height:34px;
-	padding:5px;
+	padding: 0 5px;
 	color:#666666;
 	border:none;
 	background:none;
@@ -435,6 +436,8 @@ div.list_items:hover{
 	font-weight: 400;
 	text-align: left;
 	color: rgba(0, 0, 0, 1);
+	border:none;
+	padding:0 10px;
 }
 .radioBtn{
 	flex:none;
@@ -521,7 +524,7 @@ div.list_items:hover{
 	height: 100%;
 	top: 94px;
 	left: 360px;
-	padding: 20px 15px;
+	padding: 0 15px;
 	margin:0 auto;
 
 }
@@ -605,7 +608,7 @@ div.list_items:hover{
 	position:absolute;
 	width: max-content;
 	height: 12px;
-	bottom: 3%;
+	bottom: 15px;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	z-index: 1;
@@ -646,6 +649,9 @@ div.list_items:hover{
 	}
 	.att{
 		width: 100%;
+	}
+	.section{
+		height: 100%;
 	}
 
 }
