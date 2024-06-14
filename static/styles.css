@@ -15,16 +15,15 @@ html,body{
 }
 
 .navigation{
-	display:flex;
-	justify-content:center;
-    align-items:center;
-	width:1920px;
-	height:54px;
+	width:auto;
+	height:59px;
 	background-color: #FFFFFF;
-	position:sticky;
-	top:0px;
+	position:fixed;
+	padding:15px 0px 0px 0px;
 	z-index: 1000;
-	margin:0 auto;
+}
+.navigation_placeholder{
+	height:59px;
 }
 
 .title{
@@ -37,7 +36,14 @@ html,body{
 	font-size:30px;
 	font-weight:bolder;
 	color:#448899;
-	Line-height:30px;
+	line-height:30px;
+	margin:0 auto 5px auto;
+}
+
+
+.home:hover{
+	cursor:pointer;
+	text-decoration: underline; /* 可選：停下时有下畫線效果 */
 }
 .index_Btn{
 	flex:none;
@@ -50,12 +56,12 @@ html,body{
 	font-weight:500;
 	font-size:16px;
 	height:34px;
-	padding:5px;
+	padding: 0 5px;
 	color:#666666;
 	border:none;
 	background:none;
 	font-weight: bold;
-	Line-height:13.3px;
+	line-height:13.3px;
 }
 button.Btn:hover {
 	cursor: pointer;
@@ -119,7 +125,6 @@ img#searchBtn:hover{
 
 .main{
 	position: relative;
-	justify-content:center;
 	width:1920px;
 	height:966px;
 	padding:40px 0px;
@@ -230,6 +235,10 @@ div.list_items:hover{
 	background: rgba(196, 196, 196, 1);
 	border-radius: 5px 5px 5px 5px;
 	object-fit: cover;
+	cursor: pointer;
+}
+.img:hover{
+	opacity: 50%;
 }
 /* .mask{
 	position: absolute;
@@ -276,6 +285,7 @@ div.list_items:hover{
 	text-align: left;
 	padding:0 10px;
 	color: rgba(117, 117, 117, 1);
+	white-space: nowrap; /*本文不換行*/
 }
 .category{
 	text-align: right;
@@ -286,7 +296,7 @@ div.list_items:hover{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 1920px;
+	width: 100%;
 	height: 104px;
 	margin:40px 0px 0 0px;
 	gap: 0px;
@@ -303,10 +313,328 @@ div.list_items:hover{
 	text-align: center;
 	color: rgba(255, 255, 255, 1);
 }
+/* attraction.html--------------------- */
+.separator{
+	width:100%;
+	height: 0px;
+	border: 1px solid rgba(232, 232, 232, 1);
+}
+.section{
+	display:flex;
+	margin: 0 auto;
+	width: 1200px;
+	height: 440px;
+	padding:40px 15px;
+	justify-content: space-between;
+}
 
+.profile{
+	flex:none;
+	position: relative;
+	width: 600px;
+	height: 400px;
+	margin-left: 30px;
+}
+.bookingForm{
+	position:absolute;
+	width: 600px;
+	height: 302px;
+	top: 90px;
+	gap: 0px;
+	border-radius: 5px;
+	background: rgba(232, 232, 232, 1);
+}
+.h3_attName{
+	position:absolute;
+	width: 100%;
+	height: 33px;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 24px;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+}
+.text_category_mrt{
+	position:absolute;
+	width: 100%;
+	height: 22px;
+	top: 48px;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 13.3px;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+}
+.title_booking{
+	position:absolute;
+	width: 95%;
+	height: 22px;
+	top: 15px;
+	left: 20px;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 13.3px;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+}
+.text_explain{
+	position:absolute;
+	width: 95%;
+	height: 24px;
+	top: 52px;
+	left: 20px;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+	padding-right:15px;
+}
+.field_date{
+	display: flex;
+	align-items: center;
+	position: absolute;
+	width: 95%;
+	height: 35px;
+	top: 100px;
+	left: 20px;
+}
+.field_time{
+	display:flex;
+	align-items: center;
+	position: absolute;
+	width: 95%;
+	height: 22px;
+	top: 151px;
+	left: 20px;
+}
+.field_price{
+	display: flex;
+	position:absolute;
+	width: 95%;
+	height: 22px;
+	top: 188px;
+	left: 20px;
+}
+
+.text_field{
+	flex:none;
+	width: 81px;
+	height: 17px;
+	font-size: 16px;
+	font-weight: 700;
+	text-align: left;
+	line-height: 20px;
+	color: rgba(102, 102, 102, 1);
+}
+.input_date{
+	position:absolute;
+	width: 193px;
+	height: 35px;
+	left: 86px;
+	font-size: 16px;
+	font-weight: 400;
+	text-align: left;
+	color: rgba(0, 0, 0, 1);
+	border:none;
+	padding:0 10px;
+}
+.radioBtn{
+	flex:none;
+	display: block;
+	position: relative;
+	width: 87px;
+	height: 22px;
+	padding: 0px 8px 0px 30px;
+	font-size: 16px;
+	font-weight: 400;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+	cursor:pointer;
+	user-select: none;
+}
+/* 客製radio 長相 */
+.radioBtn input{
+    position:absolute;
+	opacity:0;
+	cursor:pointer;
+}
+.checkmark{
+	position: absolute;
+	top:0;
+	left: 0;
+	width:22px;
+	height: 22px;
+	border-radius: 50%;
+	display: inline-block;
+	background-color: rgba(255, 255, 255, 1);
+	margin:0 2px;
+}
+.radioBtn:hover input ~.checkmark{ /*滑鼠經過→按鈕反灰*/
+	background-color: #ccc;
+}
+.radioBtn input:checked ~.checkmark{ /*滑鼠點按鈕選取的css*/
+	background-color: rgba(255, 255, 255, 1);
+}
+.radioBtn .checkmark::after{ /*按鈕內圈的css*/
+	top:2px;
+	left:2px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background-color: rgba(68, 136, 153, 1);
+}
+.checkmark::after{ /*未選取時按鈕內圈隱藏*/
+	content:"";
+	position: absolute;
+	display: none;
+}
+.radioBtn input:checked ~ .checkmark:after{ /*選取時圓內圈出現*/
+	display:block;
+}
+.price{
+	flex:none;
+	position: relative;
+	width: 108px;
+	height: 14px;
+	top: 4px;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 13.3px;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+}
+.forBooking{
+	position: absolute;
+	width: 154px;
+	height: 36px;
+	top: 235px;
+	left: 20px;
+	border-radius: 5px;
+	border:none;
+	background: rgba(68, 136, 153, 1);
+	color: rgba(255, 255, 255, 1);
+	font-size: 19px;
+	font-weight: 400;
+	line-height: 16px;
+	text-align: center;
+}
+.sectionInfo{
+	width: 1200px;
+	height: 100%;
+	top: 94px;
+	left: 360px;
+	padding: 0 15px;
+	margin:0 auto;
+
+}
+
+.info, .address, .transport{
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 13.3px;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+	padding:20px 0;
+}
+
+.detail{
+	width:calc(100% - 20px);
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 23.17px;
+	text-align: left;
+	color: rgba(102, 102, 102, 1);
+	margin:auto;
+	padding-top:10px;
+}
+
+/* attraction的圖片設定*/
+.picture_current{
+	flex:none;
+	width: 540px;
+	height: 400px;
+	gap: 0px;
+	border-radius: 5px ;
+	background-color:gainsboro;
+	display:flex;
+	position:relative;
+}
+.slideshow{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.mySlides{
+	width:100%;
+	height: 100%;
+	display:none;
+	position: absolute;
+}
+.fade{ /* 換圖片的動畫效果*/ 
+	animation-name:fade;
+	animation-duration:1.5s;
+}
+@keyframes fade{
+	from{opacity: 0.4} to {opacity:1.0}
+}
+
+.arrow_container_img{
+	width: 36px;
+	height: 36px;
+	gap: 0px;
+	cursor: pointer;
+	transition: 0.6s ease;
+	z-index: 1;
+}
+.arrow_container_img.left{
+	position: absolute;
+	top: 50%;
+	left: 10px;
+}
+.arrow_container_img.right{
+	position: absolute;
+	top: 50%;
+	right: 10px;
+}
+.img_arrow{
+	opacity:50%;
+}
+.img_arrow:hover{
+	opacity:100%;
+}
+.circle_wrapper{
+	position:absolute;
+	width: max-content;
+	height: 12px;
+	bottom: 15px;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1;
+}
+.circle{
+	width: 12px;
+	height: 12px;
+	left: 48px;
+	margin: 0px 6px;
+	gap: 10px;
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 50%;
+	cursor:pointer;
+	display:inline-block;
+	transition: background-color 0.6s ease;
+}
+.active, .circle:hover{
+	background-color:rgba(0, 0, 0, 0.75);
+	border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+
+/* 視窗大小調整區 */
 @media(max-width:1920px){
-	.title{
-		width: 90%;
+	.attractions{
+	height: 100%;
 	}
 	.hero_section{
 		width: 100%;
@@ -314,30 +642,30 @@ div.list_items:hover{
 	.navigation{
 		width: 100%;
 	}
-	.slogan{
-		width:90%;
-	}
 	.main{
 		flex-wrap: wrap;
 		height: 100%;
-		width: 90%;
-	}
-	.list_bar{
-		width: 100%;
-	}
-	.attractions{
-		height:100%;
 		width: 100%;
 	}
 	.att{
 		width: 100%;
 	}
-	.footer{
-		width: 100%;
+	.section{
+		height: 100%;
 	}
+
 }
 
-@media(max-width:1150px){
+@media(max-width:1250px){
+	.main{
+		width: 90%;
+	}
+	.title{
+		width: 90%;
+	}
+		.slogan{
+		width:90%;
+	}
 	.search_bar{
 		width:100%;
 	}
@@ -345,7 +673,9 @@ div.list_items:hover{
 	.search_bar_input{
 		width:300px;
 	}
-
+	.list_bar{
+		width: 100%;
+	}
 	.attractions{
 		flex-wrap: wrap;
 		display:grid;
@@ -353,16 +683,52 @@ div.list_items:hover{
 		grid-template-columns: repeat(2,1fr);
 		padding: 15px;
 	}
-	.att{
+	.att {
 		width:100%;
 	}
-	.img{
+	.section {
+		width: 100%;
+		height: 100%;;
+	}
+
+	.picture_current{
+		width: 50%;
+	}
+	.profile{
+		width: calc(50% - 15px);
+	}
+	.bookingForm{
+		width: calc(100% - 15px);
+	}
+	.sectionInfo, .detail{
 		width:100%;
+		height: 100%;
+	}
+
+}
+@media(max-width:750px){
+
+	.section{
+		display:block;
+		height: 100%;
+		padding:0;
+	}
+	.picture_current{
+		width:100%;
+		height: 350px;
+		margin:0;
+	}
+	.profile{
+		width:calc(100% - 30px);
+		margin:20px auto;
+	}
+	.bookingForm{
+		width: 100%;
 	}
 
 }
 
-@media(max-width:400px){
+@media(max-width:450px){
 	.title{
 		width: 100%;
 		padding:0 10px;
@@ -374,6 +740,9 @@ div.list_items:hover{
 		display:grid;
 		width: 100%;
 		grid-template-columns: 1fr;
+	}
+	.input_date{
+		width:auto;
 	}
 
 }

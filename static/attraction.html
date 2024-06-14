@@ -3,9 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/static/styles.css" />
   <title>Attraction</title>
 </head>
 <body>
-  
+  <div class="wrapper">
+    <div class="navigation">
+      <h2 class="title">
+          <span class="home">台北一日遊</span><div class="index_Btn"><button class="Btn">預定行程</button ><button class="Btn">登入/註冊</button></div>
+      </h2>
+      <div class="separator"></div>
+    </div>
+    <div class="navigation_placeholder"></div>
+    <div class="section">
+      <div class="picture_current">
+        <div class="arrow_container_img left"><img class="img_arrow" src="/static/image/btn_leftArrow.png" ></div>
+        <div class="arrow_container_img right"><img class="img_arrow" src="/static/image/btn_rightArrow.png"></div>
+        <div class="circle_wrapper"></div>
+      </div>
+      <div class="profile">
+        <h3 class="h3_attName">景點名稱</h3>
+        <span class="text_category_mrt">類別at捷運站</span>
+        <div class="bookingForm">
+          <div class="title_booking">訂購導覽行程</div>
+          <p class="text_explain">以此景點為中心的一日行程，帶您探索城市角落故事</p>
+          <div class="field_date"><p class="text_field">選擇日期:</p> <input class="input_date" type="date"></div>
+          <div class="field_time">
+            <p class="text_field">選擇時間:</p>
+            <label class="radioBtn"><input id="morning" name="time" type="radio" checked="true"><span  class="checkmark"></span>上半天</label>
+            <label class="radioBtn"><input id="evening" name="time" type="radio"><span  class="checkmark"></span>下半天</label>
+          </div>
+          <div class="field_price"><p class="text_field">導覽費用:</p><p class="price">新台幣2000元</p></div>
+          <button type="click" class="forBooking">開始預約行程</button>
+        </div>
+      </div>
+    </div>
+   
+    <div class="sectionInfo">
+      <div class="separator"></div>
+      <div class="info"><div class="detail"></div></div>
+      <div class="address">景點地址：<div class="detail"></div></div>
+      <div class="transport">交通方式：<div class="detail"></div></div>
+     
+    </div> 
+  </div>
+  <div class="footer"><div class="footer_text">COPYRIGHT © 2021 台北一日遊</div></div>
+  <script src="\static\script_att.js"></script>
+
 </body>
 </html>
