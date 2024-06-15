@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 let left_arrow=document.querySelector("#left_arrow");
 let right_arrow=document.querySelector("#right_arrow");
-let itemWidth=50;
+let itemWidth=150;
 let scrollPosition=0;
 let mrtContainer=document.querySelector(".list_container");
 left_arrow.addEventListener("click",()=>{
@@ -49,8 +49,15 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 //搜尋框
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",(event)=>{
 	let searchBtn=document.querySelector("#searchBtn");
+	let search=document.querySelector("#search");
+	search.addEventListener('keydown',(event)=>{ //按鍵盤Enter=click
+		if(event.key==='Enter'){
+			event.preventDefault();
+			searchBtn.click();
+		}
+	});
 	searchBtn.addEventListener('click',()=>{
 		let searchBar=document.querySelector("#search");
 		let keyword=searchBar.value;
