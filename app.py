@@ -42,14 +42,14 @@ async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 	connection1=pool.get_connection()
 	cursor=connection1.cursor(dictionary=True)
 	if(keyword):
-		sql_keyword="select * from (select * from att where mrt= %s or name like %s) as subquery limit %s offset %s"
+		sql_keyword="select * from (select * from att where mrt= %s or name like %s) as subquery order by category desc limit %s offset %s"
 		val_keyword=(keyword,('%'+keyword+'%'),12,(page*12))
 		cursor.execute(sql_keyword,val_keyword)
 		results_keyword=cursor.fetchall()
 		results_page=output_pages(results_keyword,1)	
 		nextpage=findNextPage(sql_keyword,page,cursor,keyword)
 	else:
-		sql_attractions="select * from att limit %s offset %s"
+		sql_attractions="select * from att order by category desc limit %s offset %s"
 		val_attractions=(12,(page*12))
 		cursor.execute(sql_attractions,val_attractions)
 		results_all=cursor.fetchall()
@@ -98,7 +98,6 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
 #函式區	
 def output_pages(results,case):
-	# print(len(results))
 	results_page=[]
 	if case==1:
 		for i in range(len(results)):
@@ -132,7 +131,6 @@ def output_pages(results,case):
 		}
 		results_page=attractions	
 	return results_page
-
 
 def findNextPage(sql,page,cursor,keyword):
 	if(keyword):
