@@ -47,15 +47,16 @@ async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 		cursor.execute(sql_keyword,val_keyword)
 		results_keyword=cursor.fetchall()
 		results_page=output_pages(results_keyword,1)
-		nextpage=findNextPage(results_page,sql_keyword,page,cursor,keyword)	
-		
+		# nextpage=findNextPage(results_page,sql_keyword,page,cursor,keyword)	
+		nextpage=findNextPage(sql_keyword,page,cursor,keyword)
 	else:
 		sql_attractions="select * from att limit %s offset %s"
 		val_attractions=(12,(page*12))
 		cursor.execute(sql_attractions,val_attractions)
 		results_all=cursor.fetchall()
 		results_page=output_pages(results_all,1)
-		nextpage=findNextPage(results_page,sql_attractions,page,cursor,keyword)
+		# nextpage=findNextPage(results_page,sql_attractions,page,cursor,keyword)
+		nextpage=findNextPage(sql_attractions,page,cursor,keyword)
 	
 	cursor.close()
 	connection1.close()	
@@ -133,19 +134,31 @@ def output_pages(results,case):
 		}
 		results_page=attractions	
 	return results_page
-	# return results
-def findNextPage(results_page,sql,page,cursor,keyword):
-	if len(results_page)<12:
-			result=None
+
+# def findNextPage(results_page,sql,page,cursor,keyword):
+# 	if len(results_page)<12:
+# 			result=None
+# 	else:
+# 		if(keyword):
+# 			val_nextpage_check=(keyword,('%'+keyword+'%'),1,(page+1)*12)
+# 		else:
+# 			val_nextpage_check=(1,(page+1)*12)
+# 		cursor.execute(sql,val_nextpage_check)
+# 		result_nextpage_check=cursor.fetchone()
+# 		if len(result_nextpage_check) ==0:
+# 			result=None
+# 		else:
+# 			result=page+1
+# 	return result
+def findNextPage(sql,page,cursor,keyword):
+	if(keyword):
+		val_next_check=(keyword,('%'+keyword+'%'),13,(page*12))
 	else:
-		if(keyword):
-			val_nextpage_check=(keyword,('%'+keyword+'%'),1,(page+1)*12)
-		else:
-			val_nextpage_check=(1,(page+1)*12)
-		cursor.execute(sql,val_nextpage_check)
-		result_nextpage_check=cursor.fetchone()
-		if len(result_nextpage_check) ==0:
-			result=None
-		else:
-			result=page+1
+		val_next_check=(13,page*12)
+	cursor.execute(sql,val_next_check)
+	result_nextpage_check=cursor.fetchall()
+	if len(result_nextpage_check)<13:
+		result=None
+	else:
+		result=page+1
 	return result
