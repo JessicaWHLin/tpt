@@ -43,7 +43,10 @@ fetch(url).then(e=>{
 		circle.classList.add("circle");
 		mySlide.classList.add("mySlides");
 		mySlide.classList.add("fade");
+		//preload test
+		preloader(data.data.images[i]);
 		img.src=data.data.images[i];
+
 		img.classList.add("slideshow");
 		mySlide.appendChild(img);
 		picture_container.appendChild(mySlide);
@@ -118,4 +121,13 @@ function showSlides(page){
 
 function plusSlides(parameter,current_slidepage){
 	return showSlides(current_slidepage+=parameter);
+}
+
+function preloader(url){
+	let img=new Image();
+	console.log("img="+img);
+	img.onload = function (e) {
+		console.log('image preloaded');
+	  };
+	  img.src=url;
 }
