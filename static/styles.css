@@ -904,6 +904,10 @@ color: rgba(102, 102, 102, 1);
 	position:absolute;
 	top:290px;
 }
+.t4{
+	position:absolute;
+	top:233px;
+}
 .dialog_mask{
 	display:none;
 	position:fixed;

@@ -1,6 +1,6 @@
 export function showDialog(){
 	//signup&signin dialog點擊事件
-	let signinBigBtn=document.querySelector("#signinBtn");
+	let signinBigBtn=document.querySelector("#userBtn");
 	let dialog_signin=document.querySelector("#dialog_signin");
 	let dialog_signup=document.querySelector("#dialog_signup");
 	let signupBtn=document.querySelector("#wantSignup");
@@ -42,22 +42,28 @@ export function showDialog(){
 			}
 			else if(! email.value){
 				e.preventDefault();
-				alert("請輸入會員電子信箱");
+				alert("請輸入電子信箱");
 			}
 			else if(! password.value){
 				e.preventDefault();
-				alert("請輸入會員密碼");
+				alert("請輸入密碼");
 			}
 			else if(password.value.match(re)==null){
 				e.preventDefault();
 				alert("請設定長度4~8碼含英文及數字及@#$%的密碼");
 			}
 			else{
-				let signupFrom=document.querySelector("#signupForm");
-				const formData=new FormData(signupFrom);
+				const signupForm=document.querySelector("#signupForm");
+				const formData=new FormData(signupForm);
+				const form={
+					name:formData.get("name"),
+					email:formData.get("email"),
+					password:formData.get("password")
+				};
 				fetch("/api/user",{
 					method:"POST",
-					body:formData
+					headers:{'Content-Type':'application/json'},
+					body:JSON.stringify(form)
 				}).then(response=>{
 					return response.json();
 				})
@@ -74,7 +80,7 @@ export function showDialog(){
 						result.style.color="red";
 					}
 					dialogLayout.style.height="352px";
-					result.style.disconnect="block";
+					result.style.display="block";
 				}).catch(error=>{
 					console.log("error:",error);
 				});
@@ -82,3 +88,52 @@ export function showDialog(){
 		});
 	});
 }
+
+//signin輸入
+document.addEventListener("DOMContentLoaded",(event)=>{
+	document.querySelector("#signinBtn").addEventListener("click",(e)=>{
+		let email=document.querySelector("#signinEmail");
+		let passowrd=document.querySelector("#signinPassword");
+		if(! email.value){
+			e.preventDefault();
+			alert("請輸入電子信箱");
+		}
+		else if (! passowrd.value){
+			e.preventDefault();
+			alert("請輸入密碼");
+		}
+		else{
+			const signinForm=document.querySelector("#signinForm");
+			const formData=new FormData(signinForm);
+			const form={
+				email:formData.get("email"),
+				password:formData.get("password")
+			};
+			fetch("/api/user/auth",{
+				method:"PUT",
+				headers:{'Content-Type':'application/json'},
+				body:JSON.stringify(form)
+			}).then(response=>{
+				return response.json();
+			})
+			.then(data=>{
+				let result=document.querySelector("#signinResult");
+				let dialogLayout=document.querySelector(".frame_signin");
+				if(data.error == true){
+					result.textContent=data.message;
+					result.style.color="red";
+				}
+				if(data.Token !=null){
+					result.textContent="登入成功";
+					result.style.color="green"
+					localStorage.setItem("Token",data.Token);
+					console.log("token="+data.Token);
+				}
+				dialogLayout.style.height="295px";
+				result.style.display="block";
+			}).catch(error=>{
+				console.log("error:",error);
+			});
+		}
+	});
+})

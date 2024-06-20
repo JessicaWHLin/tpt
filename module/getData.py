@@ -25,7 +25,7 @@ def get_data():
 		pool_size=5,
 		**db
 	)
-	current_path=os.path.dirname(os.path.abspath(__file__))
+	current_path=os.getcwd()
 	f_path=os.path.join(current_path,'data','taipei-attractions.json')
 	with open(f_path, mode="r",encoding='utf-8') as f:
 		data=json.load(f)
