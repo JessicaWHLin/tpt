@@ -8,13 +8,13 @@
 </head>
 <body>
   <div class="wrapper">
-    <div class="navigation"><h2 class="title"><span class="home">台北一日遊</span><div class="index_Btn"><button class="Btn">預定行程</button ><button class="Btn">登入/註冊</button></div></h2></div>
+    <div class="navigation"><h2 class="title"><span class="home">台北一日遊</span><div class="index_Btn"><button class="Btn">預定行程</button ><button class="Btn" id="signinBtn">登入/註冊</button></div></h2></div>
     <div class="navigation_placeholder"></div>
     <div class="hero_section">
       <div class="slogan">
         <h1 class="h1_Titles">輕鬆享受台北一日悠閒</h1>
         <h3 class="h3_Titles">探索每個角落，體驗城市的深度旅遊行程</h3>
-        <div class="search_bar"><input id="search" class="search_bar_input" type="text" value="輸入景點名稱查詢"><img id="searchBtn" src="/static/image/btn.png"/></div>
+        <div class="search_bar"><input id="search" class="search_bar_input" type="text" placeholder="輸入景點名稱查詢"><img id="searchBtn" src="/static/image/btn.png"/></div>
       </div>
     </div>
 
@@ -27,33 +27,39 @@
       <div class="attractions" id="attractions_frame"></div> 
     </div>
   </div>
+  <div class="dialog_mask"></div>
   <div class="footer"><div class="footer_text">COPYRIGHT © 2021 台北一日遊</div></div>
     
   <div id="dialog_signin" class="dialog frame_signin">
     <div class="decorator_bar"></div>
-    <div class="close_frame"><img src="/static/image/icon_close.png" class="close_icon"/></div>
+    <div  class="close_frame"><img src="/static/image/icon_close.png" id="closeSignin" class="close_icon"/></div>
     <div class="main_dialog main_signin">
       <h3 class="h3_dialog">登入會員帳號</h3>
-      <input name="email" type="text" value="輸入電子信箱" class="input_frame s1"/>
-      <input name="password" type="text" value="輸入密碼" class="input_frame s2"/>
-      <button type="submit" class="btn_dialog b1">登入帳戶</button>
-      <span class="text_frame t1">還沒有帳戶？點此註冊</span>
+      <form id="signinForm">
+        <input name="email" type="text" placeholder="輸入電子信箱" id="signinEmail" class="input_frame line1"/>
+        <input name="password" type="password" placeholder="輸入密碼" id="signinPassword" class="input_frame line2"/>
+        <button type="button" id="signinBtn" class="btn_dialog btnLocation1">登入帳戶</button>
+      </form>
+      <span id="wantSignup" class="text_frame t1">還沒有帳戶？點此註冊</span>
     </div>
   </div>
   <div  id="dialog_signup" class="dialog frame_signup">
     <div class="decorator_bar"></div>
-    <div class="close_frame"><img src="/static/image/icon_close.png" class="close_icon"/></div>
+    <div class="close_frame"><img src="/static/image/icon_close.png" id="closeSignup" class="close_icon"/></div>
     <div class="main_dialog main_signup">
       <h3 class="h3_dialog">註冊會員帳號</h3>
-      <input name="username" type="text" value="輸入姓名" class="input_frame s1"/>
-      <input name="email" type="text" value="輸入電子信箱" class="input_frame s2"/>
-      <input name="password" type="text" value="輸入密碼" class="input_frame s3"/>
-      <button type="submit" class="btn_dialog b2">登入帳戶</button>
-      <span class="text_frame t2">已經有帳戶？點此登入</span>
+      <form id="signupForm">
+        <input name="name" type="text" placeholder="輸入姓名" id="signupName" class="input_frame line1"/>
+        <input name="email" type="text" placeholder="輸入電子信箱" id="signupEmail" class="input_frame line2"/>
+        <input name="password" type="password" placeholder="輸入密碼" id="signupPassword" class="input_frame line3"/>
+        <button type="button" id="signupBtn" class="btn_dialog btnLocation2">註冊新帳戶</button>
+      </form>
+      <span id="wantSignin" class="text_frame t2">已經有帳戶？點此登入</span>
+      <span id="signupResult" class="text_frame t3" style.display="none;"></span>
     </div>
   </div>
 
-  <!-- <div class="dialog_mask"></div> -->
-  <script src="\static\script.js"></script>
+  
+  <script type="module" src="\static\script.js"></script>
 </body>
 </html>

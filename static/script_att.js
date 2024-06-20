@@ -19,7 +19,7 @@ changeObsever.addEventListener("change",(event)=>{
 let path=window.location.pathname;
 let pathSegments=path.split('/');
 let attractionId=pathSegments[pathSegments.length-1];
-url="/api/attraction/"+attractionId;
+let url="/api/attraction/"+attractionId;
 fetch(url).then(e=>{
 	return e.json();
 }).then((data)=>{
@@ -43,10 +43,7 @@ fetch(url).then(e=>{
 		circle.classList.add("circle");
 		mySlide.classList.add("mySlides");
 		mySlide.classList.add("fade");
-		//preload test
-		preloader(data.data.images[i]);
 		img.src=data.data.images[i];
-
 		img.classList.add("slideshow");
 		mySlide.appendChild(img);
 		picture_container.appendChild(mySlide);
@@ -85,12 +82,14 @@ fetch(url).then(e=>{
 //回首頁
 let homePage=document.querySelector(".home");
 homePage.addEventListener("click",()=>{
-	url="/";
+	let url="/";
 	fetch(url).then(response=>response)	.then(data=>{
 	 location.href=url;
     }).catch(error=>console.error("Error:", error));
 });
 
+import {showDialog} from "./module.js";
+showDialog();//signin& signup的防呆+signup的流程
 
 //函式區
 function showSlides(page){
@@ -121,13 +120,4 @@ function showSlides(page){
 
 function plusSlides(parameter,current_slidepage){
 	return showSlides(current_slidepage+=parameter);
-}
-
-function preloader(url){
-	let img=new Image();
-	console.log("img="+img);
-	img.onload = function (e) {
-		console.log('image preloaded');
-	  };
-	  img.src=url;
 }

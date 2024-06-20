@@ -5,7 +5,7 @@ import mysql.connector
 from mysql.connector import pooling
 from fastapi.staticfiles import StaticFiles
 import json
-import os
+import jwt
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -92,6 +92,40 @@ async def rankMrts(request:Request):
 	cursor.close()
 	connection3.close()
 	return{"data":result_mrts}
+
+@app.post("/api/user",response_class=JSONResponse)
+async def signup(request:Request,name:str=Form(...),email:str=Form(...),password:str=Form(...)):
+	connection4=pool.get_connection()
+	cursor=connection4.cursor()
+	sql_query="select * from member where email =%s "
+	val_query=(email,)
+	cursor.execute(sql_query,val_query)
+	result=cursor.fetchone()
+	if result is None:
+		sql_signup="insert into member(name,email,password)values(%s,%s,%s)"
+		val_signup=(name,email,password)
+		cursor.execute(sql_signup,val_signup)
+		connection4.commit()
+		cursor.close()
+		connection4.close()
+		return {"ok":True}
+	else:
+		return JSONResponse(status_code=400,content={"error": True,"message":"電子信箱已被註冊"})
+
+@app.get("/api/user/auth",response_class=JSONResponse) #取得當前登入的會員資訊
+async def check_authorization(request:Request):
+	
+	result={"123":123}
+	return{"data":result}
+	
+@app.put("/api/user/auth",response_class=JSONResponse)#登入會員帳戶
+async def signin(request:Request):
+	if request == 0: #暫時的
+		return {"tokon":123}
+	else:
+		return JSONResponse(status_code=400,content={"error": True,"message":"登入失敗，驗證失敗"})
+
+	
 
 if __name__ == "__main__":
     import uvicorn

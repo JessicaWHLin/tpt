@@ -1,8 +1,7 @@
-
 // list bar
 //點擊mrt list→跳搜尋框
 document.addEventListener("DOMContentLoaded",()=>{
-	url="/api/mrts";
+	let url="/api/mrts";
 	fetch(url).then((e)=>{
 		return e.json();
 	}).then((data)=>{
@@ -39,8 +38,8 @@ right_arrow.addEventListener("click",()=>{
 //attractions沒有關鍵詞的時候
 document.addEventListener("DOMContentLoaded",()=>{
 	let page=0;
-	url="/api/attractions?page="+page;
-	fetch(url,request={"page":page}).then(e=>{return e.json();}).then((data)=>{
+	let url="/api/attractions?page="+page;
+	fetch(url,{"page":page}).then(e=>{return e.json();}).then((data)=>{
 		page=data.nextPage;
 		let attractions=data.data;
 		load_attractions(attractions);
@@ -73,6 +72,11 @@ homePage.addEventListener("click",()=>{
 	 location.href=url;
     }).catch(error=>console.error("Error:", error));
 });
+
+
+import {showDialog} from "./module.js";
+showDialog();//signin& signup的防呆+signup的流程
+
 
 
 // 函式區
@@ -117,8 +121,8 @@ function load_attractions_more(page,keyword=''){
 	let callback=(entries,observer)=>{	
 		if(entries[0].isIntersecting && ! isloading){
 			isloading=true;
-			url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
-			fetch(url,request={"page":page,"keyword":keyword}).then(e=>{return e.json();}).then((data)=>{
+			let url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
+			fetch(url,{"page":page,"keyword":keyword}).then(e=>{return e.json();}).then((data)=>{
 				page=data.nextPage;
 				let attractions=data.data;
 				load_attractions(attractions);
@@ -155,4 +159,3 @@ function query(keyword){
 	});
 	
 }
-
