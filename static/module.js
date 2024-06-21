@@ -12,6 +12,8 @@ export function ShowDialog(){//signup&signin dialog點擊事件
 	let password=document.querySelector("#signupPassword");
 	let emailSI=document.querySelector("#signinEmail");
 	let passowrdSI=document.querySelector("#signinPassword");
+	let resultSI=document.querySelector("#signinResult");
+	let result=document.querySelector("#signupResult");
 	
 	signinBigBtn.addEventListener("click",()=>popup(mask,dialog_signin));
 	signupBtn.addEventListener("click",()=>{
@@ -25,6 +27,7 @@ export function ShowDialog(){//signup&signin dialog點擊事件
 	closeSignin.addEventListener("click",()=>{
 		emailSI.value="";
 		passowrdSI.value="";
+		resultSI.value="";
 		dialog_signin.style.display="none";
 		mask.style.display="none";
 	});
@@ -32,6 +35,7 @@ export function ShowDialog(){//signup&signin dialog點擊事件
 		name.value="";
 		email.value="";
 		password.value="";
+		result.value="";
 		dialog_signup.style.display="none";
 		mask.style.display="none";
 	});
