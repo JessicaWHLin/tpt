@@ -237,6 +237,7 @@ div.list_items:hover{
 	object-fit: cover;
 	cursor: pointer;
 }
+
 .img:hover{
 	opacity: 50%;
 }
@@ -526,7 +527,6 @@ div.list_items:hover{
 	left: 360px;
 	padding: 0 15px;
 	margin:0 auto;
-
 }
 
 .info, .address, .transport{
@@ -539,7 +539,8 @@ div.list_items:hover{
 }
 
 .detail{
-	width:calc(100% - 20px);
+	width:100%;
+	height: 100%;
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 23.17px;
@@ -584,8 +585,6 @@ div.list_items:hover{
 	width: 36px;
 	height: 36px;
 	gap: 0px;
-	cursor: pointer;
-	transition: 0.6s ease;
 	z-index: 1;
 }
 .arrow_container_img.left{
@@ -606,12 +605,14 @@ div.list_items:hover{
 }
 .circle_wrapper{
 	position:absolute;
-	width: max-content;
+	width: 100%;
 	height: 12px;
 	bottom: 15px;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	justify-content: center;
 	z-index: 1;
+	display:flex;
+	flex-flow: wrap;
+	
 }
 .circle{
 	width: 12px;
@@ -700,8 +701,8 @@ div.list_items:hover{
 	.bookingForm{
 		width: calc(100% - 15px);
 	}
-	.sectionInfo, .detail{
-		width:100%;
+	.sectionInfo{
+		width: 100%;
 		height: 100%;
 	}
 
@@ -755,12 +756,24 @@ div.list_items:hover{
 	position:absolute;
 	width: 340px;
 	top: 80px;
-	left: 790px;
-	gap: 0px;
+	left:0;
+	right:0;
+	margin:0 auto;
 	border-radius: 6px 6px 6px 6px;
-	opacity: 0px;
 	background: rgba(255, 255, 255, 1);
 	box-shadow: 0px 4px 60px 0px rgba(170, 170, 170, 1);
+	animation:slide-in 1.0s ease-out;
+	z-index: 2;
+}
+@keyframes slide-in {
+	from{
+		transform:translateY(-10%);
+		opacity:0;
+	}
+	to{
+		transform:translateY(0);
+		opacity:1;
+	}
 }
 
 .frame_signin{
@@ -783,6 +796,7 @@ div.list_items:hover{
 	height: 30px;
 	top: 20px;
 	left: 300px;
+	z-index: 1;
 }
 .close_icon{
 	position: relative;
@@ -790,7 +804,8 @@ div.list_items:hover{
 	height: 16px;
 	top: 7px;
 	left: 7px;
-	gap: 0px;	
+	gap: 0px;
+	cursor:pointer;
 }
 .main_dialog{
 	position:absolute;
@@ -829,15 +844,15 @@ color: rgba(102, 102, 102, 1);
 	padding:15px 15px 15px 15px;
 
 }
-.s1{
+.line1{
 	position:absolute;
 	top:42px;
 }
-.s2{
+.line2{
 	position:absolute;
 	top:99px;
 }
-.s3{
+.line3{
 	position:absolute;
 	top:156px;
 }
@@ -854,11 +869,11 @@ color: rgba(102, 102, 102, 1);
 	color: rgba(255, 255, 255, 1);
 	background: rgba(68, 136, 153, 1);
 }
-.b1{
+.btnLocation1{
 	position:absolute;
 	top: 156px;
 }
-.b2{
+.btnLocation2{
 	position:absolute;
 	top: 213px;
 }
@@ -872,6 +887,11 @@ color: rgba(102, 102, 102, 1);
 	text-align: center;
 	color: rgba(102, 102, 102, 1);
 }
+.text_frame:hover{
+	cursor:pointer;
+	text-decoration: underline;
+}
+
 .t1{
 	position:absolute;
 	top: 213px;
@@ -880,12 +900,20 @@ color: rgba(102, 102, 102, 1);
 	position:absolute;
 	top: 270px;
 }
+.t3{
+	position:absolute;
+	top:290px;
+}
+.t4{
+	position:absolute;
+	top:233px;
+}
 .dialog_mask{
 	display:none;
-	position:absolute;
+	position:fixed;
 	top:0px;
-	width: 1920px;
-	height: 1444px;
+	width: 100dvw;
+	height: 100dvh;
 	gap: 0px;
 	opacity: 25%;
 	background: rgba(0, 0, 0, 1);

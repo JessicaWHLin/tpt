@@ -1,8 +1,7 @@
-
 // list bar
 //點擊mrt list→跳搜尋框
 document.addEventListener("DOMContentLoaded",()=>{
-	url="/api/mrts";
+	let url="/api/mrts";
 	fetch(url).then((e)=>{
 		return e.json();
 	}).then((data)=>{
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 let left_arrow=document.querySelector("#left_arrow");
 let right_arrow=document.querySelector("#right_arrow");
-let itemWidth=50;
+let itemWidth=150;
 let scrollPosition=0;
 let mrtContainer=document.querySelector(".list_container");
 left_arrow.addEventListener("click",()=>{
@@ -39,8 +38,8 @@ right_arrow.addEventListener("click",()=>{
 //attractions沒有關鍵詞的時候
 document.addEventListener("DOMContentLoaded",()=>{
 	let page=0;
-	url="/api/attractions?page="+page;
-	fetch(url,request={"page":page}).then(e=>{return e.json();}).then((data)=>{
+	let url="/api/attractions?page="+page;
+	fetch(url,{"page":page}).then(e=>{return e.json();}).then((data)=>{
 		page=data.nextPage;
 		let attractions=data.data;
 		load_attractions(attractions);
@@ -49,8 +48,15 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 //搜尋框
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",(event)=>{
 	let searchBtn=document.querySelector("#searchBtn");
+	let search=document.querySelector("#search");
+	search.addEventListener('keydown',(event)=>{ //按鍵盤Enter=click
+		if(event.key==='Enter'){
+			event.preventDefault();
+			searchBtn.click();
+		}
+	});
 	searchBtn.addEventListener('click',()=>{
 		let searchBar=document.querySelector("#search");
 		let keyword=searchBar.value;
@@ -61,11 +67,23 @@ document.addEventListener("DOMContentLoaded",()=>{
 //回首頁
 let homePage=document.querySelector(".home");
 homePage.addEventListener("click",()=>{
-	url="/";
+	let url="/";
 	fetch(url).then(response=>response)	.then(data=>{
 	 location.href=url;
     }).catch(error=>console.error("Error:", error));
 });
+
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./module.js";
+let token=localStorage.getItem("Token");
+let url="/";
+CheckAuth_WithToken();//登入驗證
+ShowDialog();
+Signup();
+Signin(url);
+if(token){
+	Signout(url);
+}
+
 
 
 // 函式區
@@ -110,8 +128,8 @@ function load_attractions_more(page,keyword=''){
 	let callback=(entries,observer)=>{	
 		if(entries[0].isIntersecting && ! isloading){
 			isloading=true;
-			url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
-			fetch(url,request={"page":page,"keyword":keyword}).then(e=>{return e.json();}).then((data)=>{
+			let url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
+			fetch(url,{"page":page,"keyword":keyword}).then(e=>{return e.json();}).then((data)=>{
 				page=data.nextPage;
 				let attractions=data.data;
 				load_attractions(attractions);
@@ -133,7 +151,7 @@ function load_attractions_more(page,keyword=''){
 function query(keyword){
 	let page=0;
 	url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
-	fetch(url,request={"page":page,"keyword":keyword})
+	fetch(url,{"page":page,"keyword":keyword})
 	.then(e=>{return e.json()}).then((data)=>{
 		let attbox=document.querySelectorAll(".att");
 		attbox.forEach(box=>{
@@ -148,4 +166,3 @@ function query(keyword){
 	});
 	
 }
-

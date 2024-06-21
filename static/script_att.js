@@ -16,11 +16,10 @@ changeObsever.addEventListener("change",(event)=>{
 });
 
 //load attraction to sectionInfo
-// let attractionId=localStorage.getItem("attractionId");
 let path=window.location.pathname;
 let pathSegments=path.split('/');
 let attractionId=pathSegments[pathSegments.length-1];
-url="/api/attraction/"+attractionId;
+let url="/api/attraction/"+attractionId;
 fetch(url).then(e=>{
 	return e.json();
 }).then((data)=>{
@@ -55,6 +54,7 @@ fetch(url).then(e=>{
 	let current_slidepage=showSlides(slidepage);
 	let leftArrow=document.querySelector(".arrow_container_img.left");
 	let rightArrow=document.querySelector(".arrow_container_img.right");
+	let circles=document.querySelectorAll(".circle");
 	leftArrow.addEventListener("click",()=>{
 		current_slidepage=plusSlides(-1,current_slidepage);
 	});
@@ -68,31 +68,53 @@ fetch(url).then(e=>{
 			current_slidepage=plusSlides(1,current_slidepage);
 			}
 	});
+	circles.forEach((circle,index) => {
+		let whichPage=index+1;
+		circle.addEventListener("click",()=>{
+			current_slidepage=showSlides(whichPage);
+			// console.log("current_slidepage="+current_slidepage);
+		});
+	});
+	
+
 }).catch(error=>console.error("Error:", error));
 
 //回首頁
 let homePage=document.querySelector(".home");
 homePage.addEventListener("click",()=>{
-	url="/";
+	let url="/";
 	fetch(url).then(response=>response)	.then(data=>{
 	 location.href=url;
     }).catch(error=>console.error("Error:", error));
 });
 
 
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./module.js";
+let token=localStorage.getItem("Token");
+let url_="/attraction/"+attractionId;
+CheckAuth_WithToken();//登入驗證
+ShowDialog();
+Signup();
+Signin(url_);
+if(token){
+	Signout(url_);
+}
+
+
 //函式區
-function showSlides(n){
+function showSlides(page){
 	let slides=document.querySelectorAll(".mySlides");
 	let circles=document.querySelectorAll(".circle");
-	let slidePage=1;
-	if(n>slides.length){
-		slidePage=1;
+	let newPage=null;
+	// console.log("slides.length="+slides.length);
+	if(page>slides.length){
+		newPage=1;
 	}
-	else if(n<1){
-		slidePage=slides.length;
+	else if(page<1){
+		newPage=slides.length;
 	}
 	else{
-		slidePage=n;
+		newPage=page;
 	}
 	for(let i=0;i<slides.length;i++){
 		slides[i].style.display="none";
@@ -100,11 +122,12 @@ function showSlides(n){
 	for(let i=0;i<circles.length;i++){
 		circles[i].className=circles[i].className.replace("active","");
 	}
-	slides[slidePage-1].style.display="block";
-	circles[slidePage-1].classList.add("active");
-	return slidePage;
+	slides[newPage-1].style.display="block";
+	circles[newPage-1].classList.add("active");
+	// console.log("newPage="+newPage);
+	return newPage;
 }
-function plusSlides(n,current_slidepage){
-	return showSlides(current_slidepage+=n);
-	
+
+function plusSlides(parameter,current_slidepage){
+	return showSlides(current_slidepage+=parameter);
 }

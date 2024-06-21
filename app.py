@@ -1,11 +1,17 @@
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
-from getData import get_data,get_mysql_connection
+from module.getData import get_data,get_mysql_connection
 import mysql.connector
 from mysql.connector import pooling
 from fastapi.staticfiles import StaticFiles
 import json
-import os
+from pydantic import BaseModel
+import jwt
+from jwt.exceptions import InvalidTokenError
+from typing import Annotated, Union
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from passlib.context import CryptContext
+from datetime import datetime, timedelta, timezone
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -16,6 +22,11 @@ pool=mysql.connector.pooling.MySQLConnectionPool(
 		pool_size=5,
 		**db
 	)
+
+SECRET_KEY="c0a1445f1d52c2b5ab8a"
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_DAYS=7
+password_context= CryptContext(schemes=["bcrypt"])
 
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
@@ -42,20 +53,19 @@ async def attractions(request: Request, page:int=0 , keyword: str |None = None):
 	connection1=pool.get_connection()
 	cursor=connection1.cursor(dictionary=True)
 	if(keyword):
-		sql_keyword="select * from (select * from att where mrt= %s or name like %s) as subquery limit %s offset %s"
+		sql_keyword="select * from (select * from att where mrt= %s or name like %s) as subquery order by category desc limit %s offset %s"
 		val_keyword=(keyword,('%'+keyword+'%'),12,(page*12))
 		cursor.execute(sql_keyword,val_keyword)
 		results_keyword=cursor.fetchall()
-		results_page=output_pages(results_keyword,1)
-		nextpage=findNextPage(results_page,sql_keyword,page,cursor,keyword)	
-		
+		results_page=output_pages(results_keyword,1)	
+		nextpage=findNextPage(sql_keyword,page,cursor,keyword)
 	else:
-		sql_attractions="select * from att limit %s offset %s"
+		sql_attractions="select * from att order by category desc limit %s offset %s"
 		val_attractions=(12,(page*12))
 		cursor.execute(sql_attractions,val_attractions)
 		results_all=cursor.fetchall()
 		results_page=output_pages(results_all,1)
-		nextpage=findNextPage(results_page,sql_attractions,page,cursor,keyword)
+		nextpage=findNextPage(sql_attractions,page,cursor,keyword)
 	
 	cursor.close()
 	connection1.close()	
@@ -71,7 +81,6 @@ async def attractionId(request:Request, attractionId:int):
 	val_id=(attractionId,)
 	cursor.execute(sql_id,val_id)
 	results_id=cursor.fetchone()
-	# print(results_id)
 	if results_id == None:
 		return JSONResponse(status_code=400,content={"error": True,"message":"景點編號不正確"})
 	else:
@@ -93,13 +102,75 @@ async def rankMrts(request:Request):
 	cursor.close()
 	connection3.close()
 	return{"data":result_mrts}
+class Signup(BaseModel):
+	name: str
+	email:str
+	password:str
+
+@app.post("/api/user",response_class=JSONResponse) #註冊新會員
+async def signup(request:Request,signup: Signup):
+	email=signup.email
+	name=signup.name
+	password=signup.password
+	connection4=pool.get_connection()
+	cursor=connection4.cursor()
+	sql_query="select * from member where email =%s "
+	val_query=(email,)
+	cursor.execute(sql_query,val_query)
+	result=cursor.fetchone()
+	if result is None:
+		sql_signup="insert into member(name,email,password)values(%s,%s,%s)"
+		val_signup=(name,email,get_password_hash(password))
+		cursor.execute(sql_signup,val_signup)
+		connection4.commit()
+		cursor.close()
+		connection4.close()
+		return {"ok":True}
+	else:
+		return JSONResponse(status_code=400,content={"error": True,"message":"電子信箱已被註冊"})
+
+class Signin(BaseModel):
+	email:str
+	password:str
+
+@app.put("/api/user/auth",response_class=JSONResponse)#登入會員帳戶
+async def signin(request:Request,signin:Signin):
+	email=signin.email
+	password=signin.password
+	user=authenticate_user(email,password)
+	if not user:
+		return JSONResponse(status_code=400,content={"error": True,"message":"登入失敗"})
+	access_token_expires=timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
+	# print("access_token_expires=",access_token_expires)
+	access_token=create_access_token({"email":user["email"]},expires_delta=access_token_expires)
+	return {"Token":access_token}
+
+bearer_token=HTTPBearer()
+def get_current_token(credentials: HTTPAuthorizationCredentials=Security(bearer_token)):
+	token=credentials.credentials
+	return token
+
+@app.get("/api/user/auth") #取得當前登入的會員資訊
+async def check_authorization(token:str =Depends(get_current_token)):
+	print("token=",token)
+	if(token):
+		user= await get_current_user(token)
+		if user is not None:
+			print("user=",user)
+			result={"id":user["id"],"name":user["name"],"email":user["email"]}
+		else:
+			result=None
+		return{"data":result}
+	else:
+		return {"data":None}
+
+
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
 #函式區	
 def output_pages(results,case):
-	# print(len(results))
 	results_page=[]
 	if case==1:
 		for i in range(len(results)):
@@ -133,19 +204,67 @@ def output_pages(results,case):
 		}
 		results_page=attractions	
 	return results_page
-	# return results
-def findNextPage(results_page,sql,page,cursor,keyword):
-	if len(results_page)<12:
-			result=None
+
+def findNextPage(sql,page,cursor,keyword):
+	if(keyword):
+		val_next_check=(keyword,('%'+keyword+'%'),13,(page*12))
 	else:
-		if(keyword):
-			val_nextpage_check=(keyword,('%'+keyword+'%'),1,(page+1)*12)
-		else:
-			val_nextpage_check=(1,(page+1)*12)
-		cursor.execute(sql,val_nextpage_check)
-		result_nextpage_check=cursor.fetchone()
-		if len(result_nextpage_check) ==0:
-			result=None
-		else:
-			result=page+1
+		val_next_check=(13,page*12)
+	cursor.execute(sql,val_next_check)
+	result_nextpage_check=cursor.fetchall()
+	if len(result_nextpage_check)<13:
+		result=None
+	else:
+		result=page+1
 	return result
+
+def verify_password(plain_password,hashed_password):
+	return password_context.verify(plain_password,hashed_password)
+
+def get_password_hash(password):
+	return password_context.hash(password)
+
+def get_user(email:str):
+	sql_email="select id, name,email,password from member where email=%s"
+	val_email=(email,)
+	connection5=pool.get_connection()
+	cursor=connection5.cursor(dictionary=True)
+	cursor.execute(sql_email,val_email)
+	result=cursor.fetchone()
+	cursor.close()
+	connection5.close()
+	if result is not None:
+		user=result
+		return user
+	else:
+		return None
+	
+def authenticate_user(email:str,password:str):
+	user=get_user(email)
+	if not user:
+		return False
+	if not verify_password(password,user["password"]):
+		return False
+	return user
+
+def create_access_token(data:dict,expires_delta:Union[timedelta,None]=None): #建立token
+	to_encode=data.copy()
+	if expires_delta:
+		expire=datetime.now(timezone.utc)+expires_delta
+	else:
+		expire=datetime.now(timezone.utc)+timedelta(days=14)
+	to_encode.update({"exp":expire})
+	encoded_jwt=jwt.encode(to_encode,SECRET_KEY, algorithm=ALGORITHM)
+	return encoded_jwt
+
+async def get_current_user(token:str):
+	try:
+		token_decoded=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+		if token_decoded is None:
+			return None
+	except InvalidTokenError:
+			return None
+	user=get_user(token_decoded["email"])	
+	if user is None:
+		return None
+	return user
