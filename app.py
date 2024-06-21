@@ -9,7 +9,7 @@ from pydantic import BaseModel
 import jwt
 from jwt.exceptions import InvalidTokenError
 from typing import Annotated, Union
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 
@@ -141,20 +141,28 @@ async def signin(request:Request,signin:Signin):
 	if not user:
 		return JSONResponse(status_code=400,content={"error": True,"message":"登入失敗"})
 	access_token_expires=timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
-	print("access_token_expires=",access_token_expires)
+	# print("access_token_expires=",access_token_expires)
 	access_token=create_access_token({"email":user["email"]},expires_delta=access_token_expires)
 	return {"Token":access_token}
 
+bearer_token=HTTPBearer()
+def get_current_token(credentials: HTTPAuthorizationCredentials=Security(bearer_token)):
+	token=credentials.credentials
+	return token
 
-@app.get("/api/user/auth",response_class=JSONResponse) #取得當前登入的會員資訊
-async def check_authorization(request:Request,token:str):
-	user= await get_current_user(token)
-	if user is not None:
-		print("user=",user)
-		result={"id":user["id"],"name":user["name"],"email":user["email"]}
+@app.get("/api/user/auth") #取得當前登入的會員資訊
+async def check_authorization(token:str =Depends(get_current_token)):
+	print("token=",token)
+	if(token):
+		user= await get_current_user(token)
+		if user is not None:
+			print("user=",user)
+			result={"id":user["id"],"name":user["name"],"email":user["email"]}
+		else:
+			result=None
+		return{"data":result}
 	else:
-		result=user
-	return{"data":result}
+		return {"data":None}
 
 
 
@@ -225,7 +233,6 @@ def get_user(email:str):
 	result=cursor.fetchone()
 	cursor.close()
 	connection5.close()
-	print(result)
 	if result is not None:
 		user=result
 		return user

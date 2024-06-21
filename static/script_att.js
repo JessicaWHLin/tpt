@@ -88,8 +88,18 @@ homePage.addEventListener("click",()=>{
     }).catch(error=>console.error("Error:", error));
 });
 
-import {showDialog} from "./module.js";
-showDialog();//signin& signup的防呆+signup的流程
+
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./module.js";
+let token=localStorage.getItem("Token");
+let url_="/attraction/"+attractionId;
+CheckAuth_WithToken();//登入驗證
+ShowDialog();
+Signup();
+Signin(url_);
+if(token){
+	Signout(url_);
+}
+
 
 //函式區
 function showSlides(page){
