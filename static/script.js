@@ -151,7 +151,7 @@ function load_attractions_more(page,keyword=''){
 function query(keyword){
 	let page=0;
 	url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
-	fetch(url,request={"page":page,"keyword":keyword})
+	fetch(url,{"page":page,"keyword":keyword})
 	.then(e=>{return e.json()}).then((data)=>{
 		let attbox=document.querySelectorAll(".att");
 		attbox.forEach(box=>{
