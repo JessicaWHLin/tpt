@@ -27,7 +27,7 @@ export function ShowDialog(){//signup&signin dialog點擊事件
 	closeSignin.addEventListener("click",()=>{
 		emailSI.value="";
 		passowrdSI.value="";
-		resultSI.value="";
+		resultSI.textContent="";
 		dialog_signin.style.display="none";
 		mask.style.display="none";
 	});
@@ -35,7 +35,7 @@ export function ShowDialog(){//signup&signin dialog點擊事件
 		name.value="";
 		email.value="";
 		password.value="";
-		result.value="";
+		result.textContent="";
 		dialog_signup.style.display="none";
 		mask.style.display="none";
 	});
