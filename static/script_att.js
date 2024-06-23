@@ -23,6 +23,7 @@ let url="/api/attraction/"+attractionId;
 fetch(url).then(e=>{
 	return e.json();
 }).then((data)=>{
+	//如果id>58,防呆未設 
 	let attName=document.querySelector(".h3_attName");
 	let attMrtCategory=document.querySelector(".text_category_mrt");
 	let info=document.querySelector(".info .detail");
@@ -89,16 +90,14 @@ homePage.addEventListener("click",()=>{
 });
 
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url_="/attraction/"+attractionId;
 CheckAuth_WithToken();//登入驗證
 ShowDialog();
 Signup();
 Signin(url_);
-if(token){
-	Signout(url_);
-}
+if(token){ Signout(url_); }
 
 
 //函式區

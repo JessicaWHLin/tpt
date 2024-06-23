@@ -73,16 +73,14 @@ homePage.addEventListener("click",()=>{
     }).catch(error=>console.error("Error:", error));
 });
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url="/";
 CheckAuth_WithToken();//登入驗證
 ShowDialog();
 Signup();
 Signin(url);
-if(token){
-	Signout(url);
-}
+if(token){ Signout(url); }
 
 
 
