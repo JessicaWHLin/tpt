@@ -90,14 +90,18 @@ homePage.addEventListener("click",()=>{
 });
 
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken} from "./jsModule/module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url_="/attraction/"+attractionId;
-CheckAuth_WithToken();//登入驗證
+let user=await CheckAuth_WithToken();
+console.log("user in script_att=",user);
 ShowDialog();
 Signup();
 Signin(url_);
 if(token){ Signout(url_); }
+checkBooking(user);
+
+
 
 
 //函式區

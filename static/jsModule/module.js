@@ -166,12 +166,13 @@ export function Signout(url){
 }
 
 //驗證
-export function CheckAuth_WithToken(){
+export async function CheckAuth_WithToken(){
 	let token=localStorage.getItem("Token");
 	if(! token){
 		let signinBigBtn=document.querySelector("#userBtn");
 		signinBigBtn.textContent="登入/註冊";
 		// console.log("token=null,尚未登入");
+		return {"error":true}
 	}
 	else{
 		let url="/api/user/auth";
@@ -179,7 +180,7 @@ export function CheckAuth_WithToken(){
 			method:"GET",
 			headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'}	
 		}
-		fetch(url,options)
+		let user=await fetch(url,options)
 		.then(response=>{
 			return response.json();
 		})
@@ -189,16 +190,34 @@ export function CheckAuth_WithToken(){
 				// console.log("狀態:已登入");
 				let signinBigBtn=document.querySelector("#userBtn");
 				signinBigBtn.textContent="登出系統";
-				return data.data;
+				return data.data
 			}
 		})
 		.catch(error=>{
 			console.log("error=",error);
 		});
+		return user
 	}
+	
 }
 //登入/註冊事件名稱
 function popup(mask,dialog_signin){
 	mask.style.display="block";
 	dialog_signin.style.display="block";
+}
+
+export function checkBooking(user){
+	let bookingBtn=document.querySelector("#bookingBtn");
+	bookingBtn.addEventListener("click",()=>{
+		// console.log("user in checkBooking="+user.error);
+		if(user.error){
+			let dialog_signin=document.querySelector("#dialog_signin");
+			let mask=document.querySelector(".dialog_mask");
+			popup(mask,dialog_signin);
+			
+		}
+		else{
+			location.href="/booking";
+		}
+	});
 }
