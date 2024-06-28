@@ -26,7 +26,7 @@ if(user.name){
 	let id=user.id;
 	userName.textContent=user.name;
 	//用user id去找到未預定的行程
-	let url_getBooking=`/api/booking?userId=${id}`;
+	let url_getBooking="/api/booking";
 	const options={
 		method:"GET",
 		headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
@@ -86,9 +86,6 @@ if(deleteBooking){
 }else{
 	console.log("error");
 }
-	
-
-
 
 async function getData(url,options){
 	let data=await fetch(url,options)

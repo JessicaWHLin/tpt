@@ -83,15 +83,9 @@ async def get_current_token(credentials:HTTPAuthorizationCredentials=Security(be
 async def check_authorization(token:str =Depends(get_current_token)):
 	return await userModel.check_auth(token)
 
-# class Booking(BaseModel):
-# 	attractionId:int
-# 	date: str
-# 	time:str
-# 	price:int
-
 @app.get("/api/booking")#取得預定行程
-def booking(userId:int,response:Response,token:str =Depends(get_current_token)):
-	result=asyncio.run(bookingModel.getBooking(userId,token))
+def booking(response:Response,token:str =Depends(get_current_token)):
+	result=asyncio.run(bookingModel.getBooking(token))
 	return bookingView.getBooking(response,result)
 
 class NewBooking(BaseModel):

@@ -2,7 +2,7 @@ from model.user import userModel
 from module.getData import get_mysql_connection
 import json
 class bookingModel:
-	async def getBooking(data,token):
+	async def getBooking(token):
 		user= await userModel.check_auth(token)
 		if user["data"] is not None:
 			try:
@@ -14,7 +14,7 @@ class bookingModel:
 				join booking on att.id=booking.attractionId
 				where booking.userId=%s
 				"""
-				val_attraction=((data),)
+				val_attraction=(user["data"]["id"],)
 				cursor=connection6.cursor(dictionary=True)
 				cursor.execute(sql_attraction,val_attraction)
 				attraction=cursor.fetchone()
