@@ -77,7 +77,7 @@ import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from
 let token=localStorage.getItem("Token");
 let url="/";
 let user=await CheckAuth_WithToken();
-console.log("user in script_att=",user);
+console.log("current user=",user);
 ShowDialog();
 Signup();
 Signin(url);

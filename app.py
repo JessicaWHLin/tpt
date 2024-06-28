@@ -11,6 +11,7 @@ from view.booking import bookingView
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import asyncio
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -82,15 +83,15 @@ async def get_current_token(credentials:HTTPAuthorizationCredentials=Security(be
 async def check_authorization(token:str =Depends(get_current_token)):
 	return await userModel.check_auth(token)
 
-class Booking(BaseModel):
-	attractionId:int
-	date:str
-	time:str
-	price:int
-	
+# class Booking(BaseModel):
+# 	attractionId:int
+# 	date: str
+# 	time:str
+# 	price:int
+
 @app.get("/api/booking")#取得預定行程
-def booking(response:Response,booking:Booking,token:str =Depends(get_current_token)):
-	result=bookingModel.getBooking(booking,token)
+def booking(userId:int,response:Response,token:str =Depends(get_current_token)):
+	result=asyncio.run(bookingModel.getBooking(userId,token))
 	return bookingView.getBooking(response,result)
 
 class NewBooking(BaseModel):
@@ -98,13 +99,13 @@ class NewBooking(BaseModel):
 	date:str
 	time:str
 	price:int
-@app.post("api/booking")#建立新預定行程
+@app.post("/api/booking")#建立新預定行程
 def booking(response:Response,newbooking:NewBooking,token:str =Depends(get_current_token)):
-	result=bookingModel.confirmBooking(newbooking,token)
+	result=asyncio.run(bookingModel.confirmBooking(newbooking,token))
 	return bookingView.confirmBooking(response,result)
 
-@app.delete("api/booking")#刪除預定行程
-def booking(request:Request,response:Response,token:str =Depends(get_current_token)):
-	result=bookingModel.deleteBooking(request,token)
+@app.delete("/api/booking")#刪除預定行程
+def booking(response:Response,token:str =Depends(get_current_token)):
+	result=asyncio.run(bookingModel.deleteBooking(token))
 	return bookingView.deleteBooking(response,result)
 

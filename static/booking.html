@@ -19,22 +19,22 @@
     <span class="booking_emptyStatus">目前沒有任何待預訂的行程</span>
     <div class="booking_vaildStatus">
       <div class="booking_section">
-        <img class="booking_delete" src="/static/image/icon_delete.png">
-        <div class="booking_image_container"></div>
+        <img src="/static/image/icon_delete.png" id="deleteIcon" class="booking_delete" />
+        <div class="booking_image_container"><img class="booking_image" alt="image is loading"/></div>
         <div class="booking_info">
-          <div class="booking_Attname"><span>台北一日遊: </span><span id="attName">平安鐘</span></div>
-          <div class="booking_title_container"><span></span>日期:<span id="bookingDate"></span></div>
-          <div class="booking_title_container"><span></span>時間:<span id="bookingTime"></span></div>
-          <div class="booking_title_container"><span></span>費用:<span id="bookingPrice"></span></div>
-          <div class="booking_title_container"><span></span>地點:<span id="bookingAddress"></span></div>
+          <div class="booking_Attname"><span>台北一日遊:</span><span class="booking_info_detail" id="attName"></span></div>
+          <div class="booking_title_container"><span>日期:</span><span class="booking_info_detail" id="bookingDate"></span></div>
+          <div class="booking_title_container"><span>時間:</span><span class="booking_info_detail" id="bookingTime"></span></div>
+          <div class="booking_title_container"><span>費用:</span><span class="booking_info_detail" id="bookingPrice"></span></div>
+          <div class="booking_title_container"><span>地點:</span><span class="booking_info_detail" id="bookingAddress"></span></div>
         </div>
       </div>
       
       <div class="separator"></div>
       <div class="contactForm">
         <div class="booking_title">您的聯絡資訊</div>
-        <div class="booking_field"><span>聯絡姓名:</span><input class="booking_input" type="text"></div>
-        <div class="booking_field"><span>聯絡信箱:</span><input class="booking_input" type="text"></div>
+        <div class="booking_field"><span>聯絡姓名:</span><input id="username" class="booking_input" type="text"></div>
+        <div class="booking_field"><span>聯絡信箱:</span><input id="email" class="booking_input" type="text"></div>
         <div class="booking_field"><span>連絡電話:</span><input class="booking_input" type="text"></div>
         <div class="booking_contactForm_notice">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
       </div>
@@ -49,7 +49,7 @@
 
       <div class="separator"></div>
       <div class="confirm">
-        <span class="amount">總價：新台幣XXXX元</span>
+        <div class="amount"><span>總價：新台幣</span><span id="amount"></span><span>元</span></div>
         <button class="booking_cfmBtn" type="button">確認訂購並付款</button>
       </div>
     </div>
@@ -64,7 +64,7 @@
     <div class="main_dialog main_signin">
       <h3 class="h3_dialog">登入會員帳號</h3>
       <form id="signinForm">
-        <input name="email" type="text" placeholder="輸入電子信箱" id="signinEmail" class="input_frame line1"/>
+        <input name="email" type="email" placeholder="輸入電子信箱" id="signinEmail" class="input_frame line1"/>
         <input name="password" type="password" placeholder="輸入密碼" id="signinPassword" class="input_frame line2"/>
         <button type="button" id="signinBtn" class="btn_dialog btnLocation1">登入帳戶</button>
       </form>
@@ -79,7 +79,7 @@
       <h3 class="h3_dialog">註冊會員帳號</h3>
       <form id="signupForm">
         <input name="name" type="text" placeholder="輸入姓名" id="signupName" class="input_frame line1"/>
-        <input name="email" type="text" placeholder="輸入電子信箱" id="signupEmail" class="input_frame line2"/>
+        <input name="email" type="email" placeholder="輸入電子信箱" id="signupEmail" class="input_frame line2"/>
         <input name="password" type="password" placeholder="輸入密碼" id="signupPassword" class="input_frame line3"/>
         <button type="button" id="signupBtn" class="btn_dialog btnLocation2">註冊新帳戶</button>
       </form>

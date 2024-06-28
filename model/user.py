@@ -56,7 +56,7 @@ class userModel:
 		if(token):
 			user=await get_current_user(token)
 			if user is not None:
-				print("user=",user)
+				# print("user=",user)
 				result={"id":user["id"],"name":user["name"],"email":user["email"]}
 			else:
 				result=None
@@ -110,7 +110,7 @@ def create_access_token(data:dict,expires_delta:Union[timedelta,None]=None): #å»
 	else:
 		expire=datetime.now(timezone.utc)+timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
 	to_encode.update({"exp":expire})
-	print("to_encode",to_encode)
+	# print("to_encode",to_encode)
 	encoded_jwt=jwt.encode(to_encode,SECRET_KEY, algorithm=ALGORITHM)
 	return encoded_jwt
 

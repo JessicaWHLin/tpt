@@ -55,6 +55,11 @@ export function Signup(){	//signup註冊
 				e.preventDefault();
 				alert("請輸入電子信箱");
 			}
+			else if(checkEamilValidity(email.value)== false){
+				// console.log("(checkEamilValidity(email.value)=",(checkEamilValidity(email.value)))
+				e.preventDefault();
+				alert("請輸入正確的電子信箱格式");
+			}
 			else if(! password.value){
 				e.preventDefault();
 				alert("請輸入密碼");
@@ -171,7 +176,6 @@ export async function CheckAuth_WithToken(){
 	if(! token){
 		let signinBigBtn=document.querySelector("#userBtn");
 		signinBigBtn.textContent="登入/註冊";
-		// console.log("token=null,尚未登入");
 		return {"error":true}
 	}
 	else{
@@ -185,9 +189,8 @@ export async function CheckAuth_WithToken(){
 			return response.json();
 		})
 		.then(data=>{
-			console.log("user=",data.data);
+			// console.log("user=",data.data);
 			if(data.data){
-				// console.log("狀態:已登入");
 				let signinBigBtn=document.querySelector("#userBtn");
 				signinBigBtn.textContent="登出系統";
 				return data.data
@@ -200,24 +203,33 @@ export async function CheckAuth_WithToken(){
 	}
 	
 }
-//登入/註冊事件名稱
-function popup(mask,dialog_signin){
-	mask.style.display="block";
-	dialog_signin.style.display="block";
-}
 
 export function checkBooking(user){
 	let bookingBtn=document.querySelector("#bookingBtn");
 	bookingBtn.addEventListener("click",()=>{
-		// console.log("user in checkBooking="+user.error);
 		if(user.error){
 			let dialog_signin=document.querySelector("#dialog_signin");
 			let mask=document.querySelector(".dialog_mask");
 			popup(mask,dialog_signin);
-			
 		}
 		else{
 			location.href="/booking";
 		}
 	});
 }
+
+// 沒有import的函式
+//登入/註冊事件名稱
+function popup(mask,dialog_signin){
+	mask.style.display="block";
+	dialog_signin.style.display="block";
+}
+//Email的regex
+function checkEamilValidity(emailValue){
+	let emailPattern =/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+	if (emailPattern.test(emailValue)){
+		return true;
+	}
+	else{ return false;}
+}
+

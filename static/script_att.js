@@ -3,14 +3,18 @@ let changeObsever=document.querySelector(".field_time");
 let morning=document.querySelector("#morning");
 let evening=document.querySelector("#evening");
 let price=document.querySelector(".price");
+let time="上午9點到下午2點";
+let amount=2000;
 
 changeObsever.addEventListener("change",(event)=>{
 	if(event.target.type==="radio"){
 		if(evening.checked){
 			price.textContent="新台幣2500元";
+			time="下午4點到晚上9點";
+			amount=2500;
 		}
 		else{
-			price.textContent="新台幣2000元";
+			price.textContent="新台幣2000元";;
 		}
 	}
 });
@@ -23,7 +27,7 @@ let url="/api/attraction/"+attractionId;
 fetch(url).then(e=>{
 	return e.json();
 }).then((data)=>{
-	//如果id>58,防呆未設 
+	//如果id>58,防呆未設XXX
 	let attName=document.querySelector(".h3_attName");
 	let attMrtCategory=document.querySelector(".text_category_mrt");
 	let info=document.querySelector(".info .detail");
@@ -73,7 +77,6 @@ fetch(url).then(e=>{
 		let whichPage=index+1;
 		circle.addEventListener("click",()=>{
 			current_slidepage=showSlides(whichPage);
-			// console.log("current_slidepage="+current_slidepage);
 		});
 	});
 	
@@ -94,14 +97,56 @@ import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from
 let token=localStorage.getItem("Token");
 let url_="/attraction/"+attractionId;
 let user=await CheckAuth_WithToken();
-console.log("user in script_att=",user);
+console.log("current user=",user);
 ShowDialog();
 Signup();
 Signin(url_);
 if(token){ Signout(url_); }
 checkBooking(user);
 
-
+//送出newbooking
+let newBookingBtn=document.querySelector("#newBookingBtn");
+newBookingBtn.addEventListener("click",(e)=>{
+	let date=document.querySelector("#date");
+	if(!date.value){
+		e.preventDefault()
+		alert("請選擇預定日期");
+	}
+	else{
+		const booking={
+			attractionId:attractionId,
+			date:date.value,
+			time:time,
+			price:amount
+		}
+		let urlNewBooking="/api/booking";
+		let options={
+		method:"POST",
+		headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+		body: JSON.stringify(booking)
+		};
+		fetch(urlNewBooking,options)
+		.then(response=>{
+			return response.json();
+		})
+		.then(data=>{
+			if(data.error ){
+				if( data.message=="Un-signin"){
+					alert("請先登入");
+				}
+				else{
+					alert("預定行程失敗");
+				}
+			}
+			else{
+				alert("預定行程成功");
+				location.href="/booking";
+			}
+		}).catch(error=>{
+			console.log("error:",error);
+		});
+	}
+});
 
 
 //函式區
