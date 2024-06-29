@@ -17,14 +17,15 @@ def get_mysql_connection():
 		"password":password,
 		"database":database
 	}
-	return db
-def get_data():
-	db=get_mysql_connection()
 	pool=mysql.connector.pooling.MySQLConnectionPool(
 		pool_name="myPool",
 		pool_size=5,
 		**db
 	)
+	return pool
+def get_data():
+	pool=get_mysql_connection()
+
 	current_path=os.getcwd()
 	f_path=os.path.join(current_path,'data','taipei-attractions.json')
 	with open(f_path, mode="r",encoding='utf-8') as f:
