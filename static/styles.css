@@ -962,7 +962,7 @@ div.list_items:hover{
 		padding:0 10px;
 	}
 	.search_bar_input{
-		width:auto;
+		width:calc(100% - 60px);
 	}
 	.attractions{
 		display:grid;
