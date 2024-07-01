@@ -2,23 +2,29 @@
 //點擊mrt list→跳搜尋框
 document.addEventListener("DOMContentLoaded",()=>{
 	let url="/api/mrts";
-	fetch(url).then((e)=>{
+	fetch(url)
+	.then((e)=>{
 		return e.json();
 	}).then((data)=>{
 		let mrtContainer=document.querySelector(".list_container");
-		for(let i =0;i<data.data.length;i++){
-			let mrtName=document.createElement("div");
-			mrtName.classList.add("list_items");
-			mrtName.textContent=data.data[i];
-			mrtContainer.appendChild(mrtName);
-			mrtName.addEventListener('click',()=>{
-				let searchBar=document.querySelector("#search");
-				searchBar.value=mrtName.textContent;
-				query(mrtName.textContent);
-			});	
+		if(! mrtContainer){
+			console.error(".list_container not found in DOM");
+			return;
 		}
-	});
+		data.data.forEach(mrtName=>{
+			let mrtElement=document.createElement("div");
+			mrtElement.classList.add("list_items");
+			mrtElement.textContent=mrtName;
+			mrtContainer.appendChild(mrtElement);
+			mrtElement.addEventListener('click',()=>{
+				let searchBar=document.querySelector("#search");
+				searchBar.value =mrtElement.textContent;
+				query(mrtElement.textContent);
+			});	
+		})
 
+		
+	});
 });
 
 let left_arrow=document.querySelector("#left_arrow");
