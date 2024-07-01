@@ -41,7 +41,7 @@ export function ShowDialog(){//signup&signin dialog點擊事件
 	});
 }
 export function Signup(){	//signup註冊
-	document.addEventListener("DOMContentLoaded",(event)=>{
+	// document.addEventListener("DOMContentLoaded",(event)=>{
 		let re=/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%])[a-zA-Z\d@#$%]{4,8}$/;
 		document.querySelector("#signupBtn").addEventListener('click',(e)=>{
 			let name=document.querySelector("#signupName");
@@ -102,11 +102,11 @@ export function Signup(){	//signup註冊
 				});
 			}
 		});
-	});
+	// });
 }
 //signin登入
 export function Signin(url){
-	document.addEventListener("DOMContentLoaded",(event)=>{
+	// document.addEventListener("DOMContentLoaded",(event)=>{
 		document.querySelector("#signinBtn").addEventListener("click",(e)=>{
 			let email=document.querySelector("#signinEmail");
 			let passowrd=document.querySelector("#signinPassword");
@@ -152,7 +152,7 @@ export function Signin(url){
 				});
 			}
 		});
-	})
+	// });
 
 }
 
