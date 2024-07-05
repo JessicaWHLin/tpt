@@ -21,3 +21,21 @@ class bookingView:
 			else:
 				response.status_code=500
 		return result
+	
+	def paying(response,result):
+			if "error" in result and result["error"]==True:
+				if result["message"]=="Un-signin":
+					response.status_code=403
+				elif result["message"]=="付款異常":
+					response.status_code=400
+				else:
+					response.status_code=500
+			return result
+			
+	def getOrderInfo(response,result):
+		if "error" in result and result["error"]==True:
+			if result["message"]=="Un-signin":
+				response.status_code=403
+			else:
+				response.status_code=500
+		return result

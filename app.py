@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import asyncio
+from typing import Optional
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -95,7 +96,7 @@ class NewBooking(BaseModel):
 	price:int
 @app.post("/api/booking")#建立新預定行程
 def booking(response:Response,newbooking:NewBooking,token:str =Depends(get_current_token)):
-	result=asyncio.run(bookingModel.confirmBooking(newbooking,token))
+	result=asyncio.run(bookingModel.preBooking(newbooking,token))
 	return bookingView.confirmBooking(response,result)
 
 @app.delete("/api/booking")#刪除預定行程
@@ -103,3 +104,38 @@ def booking(response:Response,token:str =Depends(get_current_token)):
 	result=asyncio.run(bookingModel.deleteBooking(token))
 	return bookingView.deleteBooking(response,result)
 
+class attraction_(BaseModel):
+	id:int
+	name:str
+	address:str
+	image:str
+class trip(BaseModel):
+	attraction:attraction_
+	date:str
+	time:str
+class contact(BaseModel):
+	phone_number:str
+	name:str
+	email:str
+	zip_code:Optional[str] = "" 
+	address:Optional[str] = ""
+	national_id:Optional[str] = ""
+	member_id:Optional[str] = ""
+class order(BaseModel):
+	price:int
+	trip:trip
+	contact:contact
+class ordersInfo(BaseModel):
+	prime:str
+	order:order
+
+@app.post("/api/orders")#建立新訂單,完成付款程序
+def paying(orders:ordersInfo,response:Response,token:str =Depends(get_current_token)):
+	result=asyncio.run(bookingModel.paying(orders,token))
+	payment=bookingModel.confirmPaying(result)
+	return bookingView.paying(response,payment)
+	
+@app.get("/api/order/{orderNumber}")
+def getOrder(orderNumber:str,response:Response,token:str =Depends(get_current_token)):
+	result=asyncio.run(bookingModel.getOrderInfo(orderNumber,token))
+	return bookingView.getOrderInfo(response,result)
