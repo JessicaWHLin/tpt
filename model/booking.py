@@ -48,7 +48,6 @@ class bookingModel:
 	
 	async def preBooking(data,token):
 		user= await userModel.check_auth(token)
-		print("user in confirmBooking=",user)
 		if not data.date or not data.time or not data.price or not data.attractionId:
 			return {"error":True,"message":"Missing booking data"}
 		if user["data"] is not None:
@@ -120,8 +119,14 @@ class bookingModel:
 				val_record=(request.order.trip.attraction.id,user["data"]["id"],request.order.price,request.order.trip.date,request.order.trip.time,
 					request.order.contact.name,request.order.contact.email,request.order.contact.phone_number,order_number)
 				cursor.execute(sql_record,val_record)
+				cursor.fetchone()
 				connection9.commit()
-				
+				#成立order就移除booking
+				sql_clearBooking="delete from booking where userId=%s"
+				val_clearBooking=(user["data"]["id"],)
+				cursor.execute(sql_clearBooking,val_clearBooking)
+				cursor.fetchone()
+				connection9.commit()					
 				details = f"AttractionId: {request.order.trip.attraction.id},Attraction: {request.order.trip.attraction.name}, Address: {request.order.trip.attraction.address}"
 				url="https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
 				headers={
@@ -139,23 +144,22 @@ class bookingModel:
 				}
 				response=requests.post(url,headers=headers,json=data)
 				response_data=response.json()
-				if response.status_code != 200:
-					return{"error":True,"message":"付款異常"}
+
+				if response_data["status"] != 0:
+					return{"error":True,"result":response_data,"order_number":order_number}
 				cursor.close()
 				connection9.close()
-				return{"ok":True,"result":response_data}
-				
+				return{"ok":True,"result":response_data}	
 			except:
 				return{"error":True,"message":Exception}
-				
 		else:
 			return {"error":True,"message":"Un-signin"}
 		
 	def confirmPaying(result):
+		pool=get_mysql_connection()
+		connection10=pool.get_connection()
+		cursor=connection10.cursor()
 		if "ok" in result and result["ok"] is True:
-			pool=get_mysql_connection()
-			connection10=pool.get_connection()
-			cursor=connection10.cursor()
 			sql_payment="""
 				insert into payments(
 				order_number,
@@ -188,9 +192,30 @@ class bookingModel:
 				result["result"]["bank_result_code"],
 				result["result"]["bank_result_msg"]
 				)
-			cursor.execute(sql_payment,val_payment)
-			cursor.fetchone()
-			connection10.commit()
+		elif "error" in result and "result" in result:
+			sql_payment="""
+				insert into payments(
+				order_number,
+				rec_trade_id,
+				status,
+				bank_result_code,
+				bank_result_msg)
+				values(%s,%s,%s,%s,%s)
+				"""
+			val_payment=(
+				result["order_number"],
+				result["result"]["rec_trade_id"],
+				result["result"]["status"],
+				result["result"]["bank_result_code"],
+				result["result"]["bank_result_msg"]
+				)
+		else:
+			return result
+		cursor.execute(sql_payment,val_payment)
+		cursor.fetchone()
+		connection10.commit()
+
+		if result["result"]["status"]==0:
 			sql_paid="update orders set status=%s where order_number=%s "
 			val_paid=("paid",result["result"]["order_number"])
 			cursor.execute(sql_paid,val_paid)
@@ -199,24 +224,22 @@ class bookingModel:
 			sql_find_userId="select userId from orders where order_number=%s"
 			val_find_userId=(result["result"]["order_number"],)
 			cursor.execute(sql_find_userId,val_find_userId)
-			userId=cursor.fetchone()
-			sql_clearBooking="delete from booking where userId=%s"
-			val_clearBooking=userId
-			cursor.execute(sql_clearBooking,val_clearBooking)
 			cursor.fetchone()
-			connection10.commit()
-			data={
-				"number":result["result"]["order_number"],
-				"payment":{
-					"status":result["result"]["status"],
-					"message":result["result"]["msg"]
-				}
-			}
-			cursor.close()
-			connection10.close()
-			return {"data":data}
+			number=result["result"]["order_number"],
+
 		else:
-			return result
+			number=result["order_number"]
+		data={
+			"number":number,
+			"payment":{
+				"status":result["result"]["status"],
+				"message":result["result"]["msg"]
+			}
+		}
+		cursor.close()
+		connection10.close()
+		return {"data":data}
+
 		
 	async def getOrderInfo(orderNumber,token):
 		user= await userModel.check_auth(token)
@@ -244,7 +267,6 @@ class bookingModel:
 					"date":result["bookingDate"],
 					"time":result["bookingTime"]
 				}
-				print("getOrderInfo in bookingModel",{"data":data})
 				cursor.close()
 				connection11.close()
 				return {"data":data}
@@ -253,3 +275,4 @@ class bookingModel:
 				
 		else:
 			return {"error":True,"message":"Un-signin"}
+		

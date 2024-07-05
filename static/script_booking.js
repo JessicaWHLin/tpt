@@ -213,13 +213,13 @@ submitButton.addEventListener("click",async(e)=>{
 			body:JSON.stringify(ordersInfo)
 		}
 		let transactionResult=await getData(url,options);
-		console.log("transactionResult="+transactionResult);
+
 		if(transactionResult.data.payment.status == 0){
 			let order_number=transactionResult.data.number;
 			location.href=`/thankyou?number=${order_number}`;
 		}
 		else{
-			alert("付款失敗!");
+			alert("Oops... \n訂單號碼:["+transactionResult.data.number+"]\n訂單付款未成功\n"+"失敗原因："+transactionResult.data.payment.message+"\n請重新預定付款或聯絡系統人員");
 			location.href="/booking";
 		}
 		

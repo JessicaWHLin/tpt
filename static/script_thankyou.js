@@ -25,25 +25,29 @@ username.textContent=user.name;
 let newUrl=new URL(window.location.href);
 let number=newUrl.searchParams.get("number");
 let orderNumber=document.querySelector("#order_number");
-orderNumber.textContent=number;
-//show成功訂單
-let url_order="api/order/"+number;
-const options={
-	method:"GET",
-	headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
-}
-let orderInfo=await getData(url_order,options);
-if(orderInfo){
-	document.querySelector("#order_attName").textContent=orderInfo.data.name;
-	document.querySelector(".booking_image").src=orderInfo.data.image;
-	document.querySelector("#order_date").textContent=orderInfo.data.date;
-	document.querySelector("#order_time").textContent=orderInfo.data.time;
-	document.querySelector("#order_address").textContent=orderInfo.data.address;
-}
-else{
+if(number !=null){
+	orderNumber.textContent=number;
+	//show成功訂單
+	let url_order="api/order/"+number;
+	const options={
+		method:"GET",
+		headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+	}
+	let orderInfo=await getData(url_order,options);
+	if(orderInfo){
+		document.querySelector("#order_attName").textContent=orderInfo.data.name;
+		document.querySelector(".booking_image").src=orderInfo.data.image;
+		document.querySelector("#order_date").textContent=orderInfo.data.date;
+		document.querySelector("#order_time").textContent=orderInfo.data.time;
+		document.querySelector("#order_address").textContent=orderInfo.data.address;
+	}
+}else{
 	alert("系統中查無付款成功行程");
-	location.htef="/booking";
+	location.href="/booking";
 }
+
+
+
 // 函式區
 async function getData(url,options){
 	let data=await fetch(url,options)

@@ -23,10 +23,11 @@ class bookingView:
 		return result
 	
 	def paying(response,result):
+			print("result=",result)
 			if "error" in result and result["error"]==True:
 				if result["message"]=="Un-signin":
 					response.status_code=403
-				elif result["message"]=="付款異常":
+				elif result["result"]:
 					response.status_code=400
 				else:
 					response.status_code=500
