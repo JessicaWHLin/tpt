@@ -1,25 +1,29 @@
 // list bar
 //點擊mrt list→跳搜尋框
-document.addEventListener("DOMContentLoaded",()=>{
-	let url="/api/mrts";
-	fetch(url).then((e)=>{
+// document.addEventListener("DOMContentLoaded",()=>{
+	let url_mrt="/api/mrts";
+	fetch(url_mrt)
+	.then((e)=>{
 		return e.json();
 	}).then((data)=>{
 		let mrtContainer=document.querySelector(".list_container");
-		for(let i =0;i<data.data.length;i++){
-			let mrtName=document.createElement("div");
-			mrtName.classList.add("list_items");
-			mrtName.textContent=data.data[i];
-			mrtContainer.appendChild(mrtName);
-			mrtName.addEventListener('click',()=>{
-				let searchBar=document.querySelector("#search");
-				searchBar.value=mrtName.textContent;
-				query(mrtName.textContent);
-			});	
+		if(! mrtContainer){
+			console.error(".list_container not found in DOM");
+			return;
 		}
+		data.data.forEach(mrtName=>{
+			let mrtElement=document.createElement("div");
+			mrtElement.classList.add("list_items");
+			mrtElement.textContent=mrtName;
+			mrtContainer.appendChild(mrtElement);
+			mrtElement.addEventListener('click',()=>{
+				let searchBar=document.querySelector("#search");
+				searchBar.value =mrtElement.textContent;
+				query(mrtElement.textContent);
+			});	
+		})
 	});
-
-});
+// });
 
 let left_arrow=document.querySelector("#left_arrow");
 let right_arrow=document.querySelector("#right_arrow");
@@ -36,16 +40,16 @@ right_arrow.addEventListener("click",()=>{
 	mrtContainer.style.transform=`translateX(${scrollPosition}px)`;
 });
 //attractions沒有關鍵詞的時候
-document.addEventListener("DOMContentLoaded",()=>{
+// document.addEventListener("DOMContentLoaded",()=>{
 	let page=0;
-	let url="/api/attractions?page="+page;
-	fetch(url,{"page":page}).then(e=>{return e.json();}).then((data)=>{
+	let url_="/api/attractions?page="+page;
+	fetch(url_,{"page":page}).then(e=>{return e.json();}).then((data)=>{
 		page=data.nextPage;
 		let attractions=data.data;
 		load_attractions(attractions);
 		load_attractions_more(page);
 	});
-});
+// });
 
 //搜尋框
 document.addEventListener("DOMContentLoaded",(event)=>{
@@ -150,7 +154,7 @@ function load_attractions_more(page,keyword=''){
 
 function query(keyword){
 	let page=0;
-	url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
+	let url=`api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ''}`;
 	fetch(url,{"page":page,"keyword":keyword})
 	.then(e=>{return e.json()}).then((data)=>{
 		let attbox=document.querySelectorAll(".att");
