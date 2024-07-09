@@ -1,6 +1,6 @@
 // list bar
 //點擊mrt list→跳搜尋框
-// document.addEventListener("DOMContentLoaded",()=>{
+window.addEventListener("load",()=>{
 	let url_mrt="/api/mrts";
 	fetch(url_mrt)
 	.then((e)=>{
@@ -23,7 +23,7 @@
 			});	
 		})
 	});
-// });
+});
 
 let left_arrow=document.querySelector("#left_arrow");
 let right_arrow=document.querySelector("#right_arrow");
@@ -40,7 +40,7 @@ right_arrow.addEventListener("click",()=>{
 	mrtContainer.style.transform=`translateX(${scrollPosition}px)`;
 });
 //attractions沒有關鍵詞的時候
-// document.addEventListener("DOMContentLoaded",()=>{
+window.addEventListener("load",()=>{
 	let page=0;
 	let url_="/api/attractions?page="+page;
 	fetch(url_,{"page":page}).then(e=>{return e.json();}).then((data)=>{
@@ -49,7 +49,7 @@ right_arrow.addEventListener("click",()=>{
 		load_attractions(attractions);
 		load_attractions_more(page);
 	});
-// });
+});
 
 //搜尋框
 document.addEventListener("DOMContentLoaded",(event)=>{
