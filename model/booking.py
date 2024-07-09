@@ -3,6 +3,12 @@ from module.getData import get_mysql_connection
 import json
 import requests
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+load_dotenv("key.env")
+PARTNER_KEY=os.getenv("PARTNER_KEY")
+print("key=",PARTNER_KEY)
+
 class bookingModel:
 	async def getBooking(token):
 		user= await userModel.check_auth(token)
@@ -131,14 +137,14 @@ class bookingModel:
 				url="https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
 				headers={
 					"content-type":"application/json",
-					"x-api-key":"partner_w4ZPWPaoOxjDaz7ZaJtQxnlxXtQ5tX2TydTGdubTwDm3WQ4Dtk2ByFnJ"
+					"x-api-key":PARTNER_KEY
 				}
 				data={
 					"prime":request.prime,
 					"amount":request.order.price,
 					"merchant_id":"kittensea1205_FUBON_POS_3",
 					"details":details,
-					"partner_key":"partner_w4ZPWPaoOxjDaz7ZaJtQxnlxXtQ5tX2TydTGdubTwDm3WQ4Dtk2ByFnJ",
+					"partner_key":PARTNER_KEY,
 					"cardholder":request.order.contact.dict(),
 					"order_number":order_number
 				}

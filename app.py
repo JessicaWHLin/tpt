@@ -1,6 +1,6 @@
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
-from module.getData import get_data,get_mysql_connection
+from module.getData import get_data, get_mysql_connection
 from module.paging import *
 from model.attraction import attractionModel
 from view.attraction import attractionView
@@ -13,13 +13,18 @@ from pydantic import BaseModel
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import asyncio
 from typing import Optional
+from dotenv import load_dotenv
+import os
+
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 get_data()
 pool=get_mysql_connection()
-
-SECRET_KEY="c0a1445f1d52c2b5ab8a"
+load_dotenv("key.env")
+SECRET_KEY=os.getenv("SECRET_KEY")
+VENDER_CODE=os.getenv("VENDER_CODE")
+API_KEY=os.getenv("API_KEY")
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_DAYS=7
 
@@ -37,6 +42,10 @@ async def booking(request: Request):
 @app.get("/thankyou", include_in_schema=False)
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
+
+@app.get("/api/keys")
+def get_keys():
+	return{"VENDER_CODE":VENDER_CODE,"API_KEY":API_KEY}
 
 
 @app.exception_handler(Exception)

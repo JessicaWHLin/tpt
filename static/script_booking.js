@@ -83,9 +83,15 @@ if(deleteBooking){
 }else{
 	console.log("error");
 }
+//取得key值
+let keys=await getData("/api/keys",{method:"GET",headers:{"Content-Type":"application/json"}});
+let VENDER_CODE=keys.VENDER_CODE;
+let API_KEY=keys.API_KEY;
+console.log("vender code=",VENDER_CODE,"\n","api_key=",API_KEY);
+
 
 //tappay
-TPDirect.setupSDK(151716, 'app_XwpPbt6Scl8ikDRkpMTtxJlLHZWFUAcDWtUONmPUMvqdhED5MDZvDdyoQgnQ', 'sandbox');
+TPDirect.setupSDK(VENDER_CODE, API_KEY, 'sandbox');
 TPDirect.card.setup({
 	fields : {
 		number: {
