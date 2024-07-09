@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 import os
 load_dotenv("key.env")
 PARTNER_KEY=os.getenv("PARTNER_KEY")
-print("key=",PARTNER_KEY)
 
 class bookingModel:
 	async def getBooking(token):
