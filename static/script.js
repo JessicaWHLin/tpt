@@ -48,7 +48,6 @@ right_arrow.addEventListener("click",()=>{
 	});
 
 //搜尋框
-document.addEventListener("DOMContentLoaded",(event)=>{
 	let searchBtn=document.querySelector("#searchBtn");
 	let search=document.querySelector("#search");
 	search.addEventListener('keydown',(event)=>{ //按鍵盤Enter=click
@@ -62,7 +61,6 @@ document.addEventListener("DOMContentLoaded",(event)=>{
 		let keyword=searchBar.value;
 		query(keyword);
 	});
-});
 
 //回首頁
 let homePage=document.querySelector(".home");
