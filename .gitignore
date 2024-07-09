@@ -141,4 +141,4 @@ cython_debug/
 .DS_Store
 
 # Ignore .env file
-.env
+key.env
