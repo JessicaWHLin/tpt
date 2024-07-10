@@ -4,8 +4,12 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from jwt.exceptions import InvalidTokenError
 from typing import Union
+from dotenv import load_dotenv
+import os
+import re
 
-SECRET_KEY="c0a1445f1d52c2b5ab8a"
+load_dotenv("key.env")
+SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_DAYS=7
 password_context= CryptContext(schemes=["bcrypt"])
@@ -16,6 +20,10 @@ class userModel:
 		email=signup.email
 		name=signup.name
 		password=signup.password
+		if not email or not name or not password:
+			return {"error":True,"message":"missing input"}
+		if is_valid_email(email) is False:
+			return {"error":True,"message":"invalid email"}
 		try:
 			connection4=pool.get_connection()
 			cursor=connection4.cursor()
@@ -24,7 +32,7 @@ class userModel:
 			cursor.execute(sql_query,val_query)
 			result=cursor.fetchone()
 		except:
-			return "error"
+			return {"error":True,"message":"SQL issue"}
 		
 		if result is None:
 			try:
@@ -34,7 +42,7 @@ class userModel:
 				connection4.commit()
 				return "ok"
 			except:
-				return "error"
+				return {"error":True,"message":"SQL issue"}
 			finally:
 				cursor.close()
 				connection4.close()
@@ -126,3 +134,11 @@ async def get_current_user(token:str):
 	if user is None:
 		return None
 	return user
+
+
+#函式區
+def is_valid_email(email):
+	email_regex=re.compile(
+		r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+	)
+	return re.match(email_regex,email) is not None

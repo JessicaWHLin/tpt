@@ -2,7 +2,7 @@ from model.user import userModel
 from module.getData import get_mysql_connection
 import json
 import requests
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 import os
 load_dotenv("key.env")
@@ -54,6 +54,10 @@ class bookingModel:
 	async def preBooking(data,token):
 		user= await userModel.check_auth(token)
 		if not data.date or not data.time or not data.price or not data.attractionId:
+			return {"error":True,"message":"Missing booking data"}
+		current_date= date.today()
+		canBookDate=current_date+timedelta(days=3)
+		if data.date<canBookDate:
 			return {"error":True,"message":"Missing booking data"}
 		if user["data"] is not None:
 			try:

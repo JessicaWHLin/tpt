@@ -16,17 +16,13 @@ from typing import Optional
 from dotenv import load_dotenv
 import os
 
-
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 get_data()
 pool=get_mysql_connection()
 load_dotenv("key.env")
-SECRET_KEY=os.getenv("SECRET_KEY")
 VENDER_CODE=os.getenv("VENDER_CODE")
 API_KEY=os.getenv("API_KEY")
-ALGORITHM="HS256"
-ACCESS_TOKEN_EXPIRE_DAYS=7
 
 
 # Static Pages (Never Modify Code in this Block)

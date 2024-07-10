@@ -89,7 +89,6 @@ let VENDER_CODE=keys.VENDER_CODE;
 let API_KEY=keys.API_KEY;
 console.log("vender code=",VENDER_CODE,"\n","api_key=",API_KEY);
 
-
 //tappay
 TPDirect.setupSDK(VENDER_CODE, API_KEY, 'sandbox');
 TPDirect.card.setup({
@@ -228,15 +227,10 @@ submitButton.addEventListener("click",async(e)=>{
 			alert("Oops... \n訂單號碼:["+transactionResult.data.number+"]\n訂單付款未成功\n"+"失敗原因："+transactionResult.data.payment.message+"\n請重新預定付款或聯絡系統人員");
 			location.href="/booking";
 		}
-		
 	}
-
-
 });
 
-
 // 函式區
-
 async function getData(url,options){
 	let data=await fetch(url,options)
 	.then(response=>{
@@ -271,7 +265,6 @@ async function getPrime(event) {
     });
     return prime;
 }
-
 
 function setNumberFormGroupToError(selector) {
 	let element=document.querySelector(selector);

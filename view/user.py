@@ -5,8 +5,13 @@ class userView:
 		elif result =="existed":
 			response.status_code=400
 			return {"error":True,"message":"電子信箱已被註冊"}
-		else:
-			return Exception
+		elif result["error"] is True:
+			if result["message"]=="SQL issue":
+				response.status_code=500
+			else:
+				response.status_code=400
+			return result
+		
 	def signinResult(response,result):
 		if result==None:
 			response.status_code=400
