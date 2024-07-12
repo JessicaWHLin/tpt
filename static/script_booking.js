@@ -8,7 +8,7 @@ homePage.addEventListener("click",()=>{
     }).catch(error=>console.error("Error:", error));
 });
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from "./jsModule/module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking_checkMemberPage} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url_="/booking";
 let user=await CheckAuth_WithToken();
@@ -17,7 +17,7 @@ ShowDialog();
 Signup();
 Signin(url_);
 if(token){ Signout(url_); }
-checkBooking(user);
+checkBooking_checkMemberPage(user);
 
 //用user id去找到未預定的行程
 let url_getBooking="/api/booking";
@@ -87,7 +87,6 @@ if(deleteBooking){
 let keys=await getData("/api/keys",{method:"GET",headers:{"Content-Type":"application/json"}});
 let VENDER_CODE=keys.VENDER_CODE;
 let API_KEY=keys.API_KEY;
-console.log("vender code=",VENDER_CODE,"\n","api_key=",API_KEY);
 
 //tappay
 TPDirect.setupSDK(VENDER_CODE, API_KEY, 'sandbox');

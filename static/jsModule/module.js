@@ -198,8 +198,9 @@ export async function CheckAuth_WithToken(){
 	
 }
 
-export function checkBooking(user){
+export function checkBooking_checkMemberPage(user){
 	let bookingBtn=document.querySelector("#bookingBtn");
+	let memberBtn=document.querySelector("#memberPage");
 	bookingBtn.addEventListener("click",()=>{
 		if(user.error){
 			let dialog_signin=document.querySelector("#dialog_signin");
@@ -208,6 +209,16 @@ export function checkBooking(user){
 		}
 		else{
 			location.href="/booking";
+		}
+	});
+	memberBtn.addEventListener("click",()=>{
+		if(user.error){
+			let dialog_signin=document.querySelector("#dialog_signin");
+			let mask=document.querySelector(".dialog_mask");
+			popup(mask,dialog_signin);
+		}
+		else{
+			location.href="/member";
 		}
 	});
 }

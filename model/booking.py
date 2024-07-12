@@ -57,7 +57,8 @@ class bookingModel:
 			return {"error":True,"message":"Missing booking data"}
 		current_date= date.today()
 		canBookDate=current_date+timedelta(days=3)
-		if data.date<canBookDate:
+		bookingDate=datetime.strptime(data.date,"%Y-%m-%d").date()
+		if bookingDate<canBookDate:
 			return {"error":True,"message":"Missing booking data"}
 		if user["data"] is not None:
 			try:

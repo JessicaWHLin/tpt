@@ -15,9 +15,12 @@ import asyncio
 from typing import Optional
 from dotenv import load_dotenv
 import os
+from fastapi import UploadFile,File
+
 
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/upload", StaticFiles(directory="upload"), name="upload")
 get_data()
 pool=get_mysql_connection()
 load_dotenv("key.env")
@@ -39,10 +42,12 @@ async def booking(request: Request):
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
 
+@app.get("/member", include_in_schema=False)
+async def member(request: Request):
+	return FileResponse("./static/member.html", media_type="text/html")
 @app.get("/api/keys")
 def get_keys():
 	return{"VENDER_CODE":VENDER_CODE,"API_KEY":API_KEY}
-
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -144,3 +149,22 @@ def paying(orders:ordersInfo,response:Response,token:str =Depends(get_current_to
 def getOrder(orderNumber:str,response:Response,token:str =Depends(get_current_token)):
 	result=asyncio.run(bookingModel.getOrderInfo(orderNumber,token))
 	return bookingView.getOrderInfo(response,result)
+
+class Update_user_info(BaseModel):
+	name: str
+	email:str
+@app.post("/api/update")
+def update(response:Response,updateinfo:Update_user_info,token:str =Depends(get_current_token)):
+	result=asyncio.run(userModel.updateInfo(updateinfo,token))
+	return userView.updateInfo(response,result)
+
+@app.post("/api/upload")
+async def upload_photo(response:Response,file:UploadFile=File(...),token:str =Depends(get_current_token)):
+	result=await userModel.upload_photo(file,token)
+	return userView.upload_photo(response,result)
+
+
+@app.get("/api/profile")
+async def profile(token:str =Depends(get_current_token)):
+	result=await userModel.profile(token)
+	return result

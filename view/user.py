@@ -21,4 +21,23 @@ class userView:
 			return {"error":True, "message":"密碼錯誤"} 
 		else:
 			return result
+	def updateInfo(response,result):
+			if "error" in result and result["error"]==True:
+				if result["message"]=="Un-signin":
+					response.status_code=403
+				elif result["message"]==Exception:
+					response.status_code=500
+				else:
+					response.status_code=400
+			return result
+	def upload_photo(response,result):
+		if "error" in result and result["error"]==True:
+				if result["message"]=="Un-signin":
+					response.status_code=403
+				elif result["message"]==Exception:
+					response.status_code=500
+				else:
+					response.status_code=400
+		return result
+
 		

@@ -7,12 +7,20 @@ from typing import Union
 from dotenv import load_dotenv
 import os
 import re
+import shutil
+from fastapi import UploadFile,File
+
 
 load_dotenv("key.env")
 SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_DAYS=7
 password_context= CryptContext(schemes=["bcrypt"])
+
+UPLOAD_DIRECTORY="./upload"
+if not  os.path.exists(UPLOAD_DIRECTORY):
+	os.makedirs(UPLOAD_DIRECTORY)
+
 
 class userModel:
 	def signup(signup):
@@ -72,12 +80,81 @@ class userModel:
 		else:
 			return {"data":None}
 
+	async def updateInfo(info,token):
+		user=await userModel.check_auth(token)
+		if user["data"] is not None:
+			if not info.email or not info.name:
+				return {"error":True,"message":"missing input"}
+			if is_valid_email(info.email) is False:
+				return {"error":True,"message":"invalid email"}
+			try:
+				pool=get_mysql_connection()
+				connection12=pool.get_connection()
+				cursor=connection12.cursor()
+				sql_udpate="""
+					update member 
+					set name=%s, email=%s
+					where id=%s
+				"""
+				val_update=(info.name,info.email,user["data"]["id"])
+				print(val_update)
+				cursor.execute(sql_udpate,val_update)
+				cursor.fetchone()
+				connection12.commit()
+				cursor.close()
+				connection12.close()
+				access_token_expires=timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
+				access_token=create_access_token({"email":info.email},access_token_expires)
+			except:
+				return {"error":True,"message":Exception}
+			return {"ok":True,"Token":access_token}
+		else:
+			return {"error":True,"message":"Un-signin"}
 
+	async def upload_photo(file,token):
+		user=await userModel.check_auth(token)
+		if user["data"] is not None:
+			file_location=f"{UPLOAD_DIRECTORY}/{file.filename}"
+			try:
+				with open(file_location,"wb") as buffer: #wb=write as binary mode
+					shutil.copyfileobj(file.file,buffer)
+			except:
+				return {"error":True,"message":Exception}
+			try:
+				pool=get_mysql_connection()
+				connection13=pool.get_connection()
+				cursor=connection13.cursor()
+				sql_photo="update member set profile_photo=%s where id=%s"
+				val_photo=(file_location,user["data"]["id"])
+				cursor.execute(sql_photo,val_photo)
+				cursor.fetchone()
+				connection13.commit()
+			except:
+				return {"error":True,"message":Exception}
+			cursor.close()
+			connection13.close()
+			return {"ok":True,"url":file_location}
+		else:
+			return {"error":True,"message":"Un-signin"}
+		
+	async def profile(token):
+		user=await userModel.check_auth(token)
+		if user["data"] is not None:
+			try:
+				pool=get_mysql_connection()
+				connection14=pool.get_connection()
+				cursor=connection14.cursor()
+				cursor.execute("select profile_photo from member where id=%s",(user["data"]["id"],))
+				result=cursor.fetchone()
+				cursor.close()
+				connection14.close()
+				return {"ok":True,"data":result}
+			except:
+				return {"error":True,"message":Exception}
+		else:
+			return {"error":True,"message":"Un-signin"}
 
-
-
-
-
+#函式區
 def verify_password(plain_password,hashed_password): #驗證密碼
 	return password_context.verify(plain_password,hashed_password)
 
@@ -135,8 +212,6 @@ async def get_current_user(token:str):
 		return None
 	return user
 
-
-#函式區
 def is_valid_email(email):
 	email_regex=re.compile(
 		r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
