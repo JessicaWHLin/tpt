@@ -163,7 +163,6 @@ async def upload_photo(response:Response,file:UploadFile=File(...),token:str =De
 	result=await userModel.upload_photo(file,token)
 	return userView.upload_photo(response,result)
 
-
 @app.get("/api/profile")
 async def profile(token:str =Depends(get_current_token)):
 	result=await userModel.profile(token)

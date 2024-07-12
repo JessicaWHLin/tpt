@@ -146,9 +146,18 @@ class userModel:
 				cursor=connection14.cursor()
 				cursor.execute("select profile_photo from member where id=%s",(user["data"]["id"],))
 				result=cursor.fetchone()
+				sql_history="""
+					select order_number, att.name, bookingDate, bookingTime, amount, status
+					from orders join att
+					on orders.attractionId=att.id
+					where orders.userId=%s
+				"""
+				val_history=(user["data"]["id"],)
+				cursor.execute(sql_history,val_history)
+				orders=cursor.fetchall()
 				cursor.close()
 				connection14.close()
-				return {"ok":True,"data":result}
+				return {"ok":True,"data":result,"orders":orders}
 			except:
 				return {"error":True,"message":Exception}
 		else:

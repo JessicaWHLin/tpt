@@ -27,9 +27,9 @@ const options={
 	method:"GET",
 		headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
 }
-let photoUrl=await getData(url_profile,options);
-if(photoUrl.data[0] !=null){
-	photo.src=photoUrl.data[0];
+let profile=await getData(url_profile,options);
+if(profile.data[0] !=null){
+	photo.src=profile.data[0];
 	photo.style.display="block";
 }
 else{
@@ -79,8 +79,38 @@ inputBtn.addEventListener("change",async (event)=>{
 		photo.style.display="block";
 	}
 });
-
-
+const titles=["訂單編號","景點名稱","預定日期","預定時間","行程費用","付款狀態"];
+class Order{
+	constructor(containerclass){
+		this.container=document.querySelector(containerclass);
+	}
+	
+	add_History_Order(data){
+		let orderContainer=document.createElement("div");
+		orderContainer.classList.add("orderHistoryContainer");
+		let separator=document.createElement("div");
+		separator.classList.add("separator");
+		for(let i=0;i<6;i++){
+			let subcontainer=document.createElement("div");
+			subcontainer.classList.add("orderHistorytitle");
+			let title=document.createElement("span");
+			title.textContent=titles[i]+":";
+			let content=document.createElement("span");
+			content.classList.add("booking_info_detail");
+			content.textContent=data[i];
+			subcontainer.appendChild(title);
+			subcontainer.appendChild(content);
+			orderContainer.appendChild(subcontainer);
+		}
+		this.container.appendChild(orderContainer);
+		this.container.appendChild(separator);
+	}
+}
+let orderelement=new Order("#historyOrder");
+let historyOrder=profile.orders;
+historyOrder.forEach(order=>{
+		orderelement.add_History_Order(order);
+})
 
 
 
