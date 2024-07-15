@@ -7,7 +7,7 @@ homePage.addEventListener("click",()=>{
     }).catch(error=>console.error("Error:", error));
 });
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from "./jsModule/module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking_checkMemberPage} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url_="/booking";
 let user=await CheckAuth_WithToken();
@@ -16,7 +16,7 @@ ShowDialog();
 Signup();
 Signin(url_);
 if(token){ Signout(url_); }
-checkBooking(user);
+checkBooking_checkMemberPage(user);
 
 let username=document.querySelector("#user");
 username.textContent=user.name;

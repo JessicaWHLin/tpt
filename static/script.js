@@ -1,6 +1,5 @@
 // list bar
 //點擊mrt list→跳搜尋框
-// document.addEventListener("DOMContentLoaded",()=>{
 	let url_mrt="/api/mrts";
 	fetch(url_mrt)
 	.then((e)=>{
@@ -23,7 +22,6 @@
 			});	
 		})
 	});
-// });
 
 let left_arrow=document.querySelector("#left_arrow");
 let right_arrow=document.querySelector("#right_arrow");
@@ -40,7 +38,6 @@ right_arrow.addEventListener("click",()=>{
 	mrtContainer.style.transform=`translateX(${scrollPosition}px)`;
 });
 //attractions沒有關鍵詞的時候
-// document.addEventListener("DOMContentLoaded",()=>{
 	let page=0;
 	let url_="/api/attractions?page="+page;
 	fetch(url_,{"page":page}).then(e=>{return e.json();}).then((data)=>{
@@ -49,10 +46,8 @@ right_arrow.addEventListener("click",()=>{
 		load_attractions(attractions);
 		load_attractions_more(page);
 	});
-// });
 
 //搜尋框
-document.addEventListener("DOMContentLoaded",(event)=>{
 	let searchBtn=document.querySelector("#searchBtn");
 	let search=document.querySelector("#search");
 	search.addEventListener('keydown',(event)=>{ //按鍵盤Enter=click
@@ -66,7 +61,6 @@ document.addEventListener("DOMContentLoaded",(event)=>{
 		let keyword=searchBar.value;
 		query(keyword);
 	});
-});
 
 //回首頁
 let homePage=document.querySelector(".home");
@@ -77,7 +71,7 @@ homePage.addEventListener("click",()=>{
     }).catch(error=>console.error("Error:", error));
 });
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from "./jsModule/module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking_checkMemberPage} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url="/";
 let user=await CheckAuth_WithToken();
@@ -86,7 +80,7 @@ ShowDialog();
 Signup();
 Signin(url);
 if(token){ Signout(url); }
-checkBooking(user);
+checkBooking_checkMemberPage(user);
 
 
 

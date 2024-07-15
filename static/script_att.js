@@ -93,7 +93,7 @@ homePage.addEventListener("click",()=>{
 });
 
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from "./jsModule/module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking_checkMemberPage} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url_="/attraction/"+attractionId;
 let user=await CheckAuth_WithToken();
@@ -102,49 +102,59 @@ ShowDialog();
 Signup();
 Signin(url_);
 if(token){ Signout(url_); }
-checkBooking(user);
+checkBooking_checkMemberPage(user);
 
 //送出newbooking
 let newBookingBtn=document.querySelector("#newBookingBtn");
 newBookingBtn.addEventListener("click",(e)=>{
 	let date=document.querySelector("#date");
 	if(!date.value){
-		e.preventDefault()
+		e.preventDefault();
 		alert("請選擇預定日期");
 	}
 	else{
-		const booking={
-			attractionId:attractionId,
-			date:date.value,
-			time:time,
-			price:amount
+		const currentDate=new Date();
+		let daysToAdd=3;
+		currentDate.setDate(currentDate.getDate()+daysToAdd);
+		let inputDate=new Date(date.value);
+		if(inputDate<currentDate){
+			e.preventDefault();
+			alert("請輸入正確日期\n請預約三日後日期");
 		}
-		let urlNewBooking="/api/booking";
-		let options={
-		method:"POST",
-		headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
-		body: JSON.stringify(booking)
-		};
-		fetch(urlNewBooking,options)
-		.then(response=>{
-			return response.json();
-		})
-		.then(data=>{
-			if(data.error ){
-				if( data.message=="Un-signin"){
-					alert("請先登入");
+		else{
+			const booking={
+				attractionId:attractionId,
+				date:date.value,
+				time:time,
+				price:amount
+			}
+			let urlNewBooking="/api/booking";
+			let options={
+			method:"POST",
+			headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+			body: JSON.stringify(booking)
+			};
+			fetch(urlNewBooking,options)
+			.then(response=>{
+				return response.json();
+			})
+			.then(data=>{
+				if(data.error ){
+					if( data.message=="Un-signin"){
+						alert("請先登入");
+					}
+					else{
+						alert("預定行程失敗");
+					}
 				}
 				else{
-					alert("預定行程失敗");
+					alert("預定行程成功");
+					location.href="/booking";
 				}
-			}
-			else{
-				alert("預定行程成功");
-				location.href="/booking";
-			}
-		}).catch(error=>{
-			console.log("error:",error);
-		});
+			}).catch(error=>{
+				console.log("error:",error);
+			});
+		}
 	}
 });
 

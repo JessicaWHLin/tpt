@@ -5,8 +5,13 @@ class userView:
 		elif result =="existed":
 			response.status_code=400
 			return {"error":True,"message":"電子信箱已被註冊"}
-		else:
-			return Exception
+		elif result["error"] is True:
+			if result["message"]=="SQL issue":
+				response.status_code=500
+			else:
+				response.status_code=400
+			return result
+		
 	def signinResult(response,result):
 		if result==None:
 			response.status_code=400
@@ -16,4 +21,23 @@ class userView:
 			return {"error":True, "message":"密碼錯誤"} 
 		else:
 			return result
+	def updateInfo(response,result):
+			if "error" in result and result["error"]==True:
+				if result["message"]=="Un-signin":
+					response.status_code=403
+				elif result["message"]==Exception:
+					response.status_code=500
+				else:
+					response.status_code=400
+			return result
+	def upload_photo(response,result):
+		if "error" in result and result["error"]==True:
+				if result["message"]=="Un-signin":
+					response.status_code=403
+				elif result["message"]==Exception:
+					response.status_code=500
+				else:
+					response.status_code=400
+		return result
+
 		

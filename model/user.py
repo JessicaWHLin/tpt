@@ -4,11 +4,23 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from jwt.exceptions import InvalidTokenError
 from typing import Union
+from dotenv import load_dotenv
+import os
+import re
+import shutil
+from fastapi import UploadFile,File
 
-SECRET_KEY="c0a1445f1d52c2b5ab8a"
+
+load_dotenv("key.env")
+SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_DAYS=7
 password_context= CryptContext(schemes=["bcrypt"])
+
+UPLOAD_DIRECTORY="./upload"
+if not  os.path.exists(UPLOAD_DIRECTORY):
+	os.makedirs(UPLOAD_DIRECTORY)
+
 
 class userModel:
 	def signup(signup):
@@ -16,6 +28,10 @@ class userModel:
 		email=signup.email
 		name=signup.name
 		password=signup.password
+		if not email or not name or not password:
+			return {"error":True,"message":"missing input"}
+		if is_valid_email(email) is False:
+			return {"error":True,"message":"invalid email"}
 		try:
 			connection4=pool.get_connection()
 			cursor=connection4.cursor()
@@ -24,7 +40,7 @@ class userModel:
 			cursor.execute(sql_query,val_query)
 			result=cursor.fetchone()
 		except:
-			return "error"
+			return {"error":True,"message":"SQL issue"}
 		
 		if result is None:
 			try:
@@ -34,7 +50,7 @@ class userModel:
 				connection4.commit()
 				return "ok"
 			except:
-				return "error"
+				return {"error":True,"message":"SQL issue"}
 			finally:
 				cursor.close()
 				connection4.close()
@@ -64,12 +80,90 @@ class userModel:
 		else:
 			return {"data":None}
 
+	async def updateInfo(info,token):
+		user=await userModel.check_auth(token)
+		if user["data"] is not None:
+			if not info.email or not info.name:
+				return {"error":True,"message":"missing input"}
+			if is_valid_email(info.email) is False:
+				return {"error":True,"message":"invalid email"}
+			try:
+				pool=get_mysql_connection()
+				connection12=pool.get_connection()
+				cursor=connection12.cursor()
+				sql_udpate="""
+					update member 
+					set name=%s, email=%s
+					where id=%s
+				"""
+				val_update=(info.name,info.email,user["data"]["id"])
+				print(val_update)
+				cursor.execute(sql_udpate,val_update)
+				cursor.fetchone()
+				connection12.commit()
+				cursor.close()
+				connection12.close()
+				access_token_expires=timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
+				access_token=create_access_token({"email":info.email},access_token_expires)
+			except:
+				return {"error":True,"message":Exception}
+			return {"ok":True,"Token":access_token}
+		else:
+			return {"error":True,"message":"Un-signin"}
 
+	async def upload_photo(file,token):
+		user=await userModel.check_auth(token)
+		if user["data"] is not None:
+			file_location=f"{UPLOAD_DIRECTORY}/{file.filename}"
+			try:
+				with open(file_location,"wb") as buffer: #wb=write as binary mode
+					shutil.copyfileobj(file.file,buffer)
+			except:
+				return {"error":True,"message":Exception}
+			try:
+				pool=get_mysql_connection()
+				connection13=pool.get_connection()
+				cursor=connection13.cursor()
+				sql_photo="update member set profile_photo=%s where id=%s"
+				val_photo=(file_location,user["data"]["id"])
+				cursor.execute(sql_photo,val_photo)
+				cursor.fetchone()
+				connection13.commit()
+			except:
+				return {"error":True,"message":Exception}
+			cursor.close()
+			connection13.close()
+			return {"ok":True,"url":file_location}
+		else:
+			return {"error":True,"message":"Un-signin"}
+		
+	async def profile(token):
+		user=await userModel.check_auth(token)
+		if user["data"] is not None:
+			try:
+				pool=get_mysql_connection()
+				connection14=pool.get_connection()
+				cursor=connection14.cursor()
+				cursor.execute("select profile_photo from member where id=%s",(user["data"]["id"],))
+				result=cursor.fetchone()
+				sql_history="""
+					select order_number, att.name, bookingDate, bookingTime, amount, status
+					from orders join att
+					on orders.attractionId=att.id
+					where orders.userId=%s
+				"""
+				val_history=(user["data"]["id"],)
+				cursor.execute(sql_history,val_history)
+				orders=cursor.fetchall()
+				cursor.close()
+				connection14.close()
+				return {"ok":True,"data":result,"orders":orders}
+			except:
+				return {"error":True,"message":Exception}
+		else:
+			return {"error":True,"message":"Un-signin"}
 
-
-
-
-
+#函式區
 def verify_password(plain_password,hashed_password): #驗證密碼
 	return password_context.verify(plain_password,hashed_password)
 
@@ -126,3 +220,9 @@ async def get_current_user(token:str):
 	if user is None:
 		return None
 	return user
+
+def is_valid_email(email):
+	email_regex=re.compile(
+		r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+	)
+	return re.match(email_regex,email) is not None

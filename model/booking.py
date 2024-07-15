@@ -2,7 +2,12 @@ from model.user import userModel
 from module.getData import get_mysql_connection
 import json
 import requests
-from datetime import datetime
+from datetime import datetime, date, timedelta
+from dotenv import load_dotenv
+import os
+load_dotenv("key.env")
+PARTNER_KEY=os.getenv("PARTNER_KEY")
+
 class bookingModel:
 	async def getBooking(token):
 		user= await userModel.check_auth(token)
@@ -49,6 +54,11 @@ class bookingModel:
 	async def preBooking(data,token):
 		user= await userModel.check_auth(token)
 		if not data.date or not data.time or not data.price or not data.attractionId:
+			return {"error":True,"message":"Missing booking data"}
+		current_date= date.today()
+		canBookDate=current_date+timedelta(days=3)
+		bookingDate=datetime.strptime(data.date,"%Y-%m-%d").date()
+		if bookingDate<canBookDate:
 			return {"error":True,"message":"Missing booking data"}
 		if user["data"] is not None:
 			try:
@@ -131,14 +141,14 @@ class bookingModel:
 				url="https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
 				headers={
 					"content-type":"application/json",
-					"x-api-key":"partner_w4ZPWPaoOxjDaz7ZaJtQxnlxXtQ5tX2TydTGdubTwDm3WQ4Dtk2ByFnJ"
+					"x-api-key":PARTNER_KEY
 				}
 				data={
 					"prime":request.prime,
 					"amount":request.order.price,
 					"merchant_id":"kittensea1205_FUBON_POS_3",
 					"details":details,
-					"partner_key":"partner_w4ZPWPaoOxjDaz7ZaJtQxnlxXtQ5tX2TydTGdubTwDm3WQ4Dtk2ByFnJ",
+					"partner_key":PARTNER_KEY,
 					"cardholder":request.order.contact.dict(),
 					"order_number":order_number
 				}

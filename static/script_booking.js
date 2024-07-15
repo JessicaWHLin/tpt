@@ -8,7 +8,7 @@ homePage.addEventListener("click",()=>{
     }).catch(error=>console.error("Error:", error));
 });
 
-import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking} from "./jsModule/module.js";
+import {ShowDialog,Signup,Signin,Signout,CheckAuth_WithToken, checkBooking_checkMemberPage} from "./jsModule/module.js";
 let token=localStorage.getItem("Token");
 let url_="/booking";
 let user=await CheckAuth_WithToken();
@@ -17,7 +17,7 @@ ShowDialog();
 Signup();
 Signin(url_);
 if(token){ Signout(url_); }
-checkBooking(user);
+checkBooking_checkMemberPage(user);
 
 //用user id去找到未預定的行程
 let url_getBooking="/api/booking";
@@ -83,9 +83,13 @@ if(deleteBooking){
 }else{
 	console.log("error");
 }
+//取得key值
+let keys=await getData("/api/keys",{method:"GET",headers:{"Content-Type":"application/json"}});
+let VENDER_CODE=keys.VENDER_CODE;
+let API_KEY=keys.API_KEY;
 
 //tappay
-TPDirect.setupSDK(151716, 'app_XwpPbt6Scl8ikDRkpMTtxJlLHZWFUAcDWtUONmPUMvqdhED5MDZvDdyoQgnQ', 'sandbox');
+TPDirect.setupSDK(VENDER_CODE, API_KEY, 'sandbox');
 TPDirect.card.setup({
 	fields : {
 		number: {
@@ -222,15 +226,10 @@ submitButton.addEventListener("click",async(e)=>{
 			alert("Oops... \n訂單號碼:["+transactionResult.data.number+"]\n訂單付款未成功\n"+"失敗原因："+transactionResult.data.payment.message+"\n請重新預定付款或聯絡系統人員");
 			location.href="/booking";
 		}
-		
 	}
-
-
 });
 
-
 // 函式區
-
 async function getData(url,options){
 	let data=await fetch(url,options)
 	.then(response=>{
@@ -265,7 +264,6 @@ async function getPrime(event) {
     });
     return prime;
 }
-
 
 function setNumberFormGroupToError(selector) {
 	let element=document.querySelector(selector);
