@@ -1,75 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/static/styles.css" />
-  <title>Member Page</title>
-</head>
-<body>
-	<div class="wrapper">
-		<div class="navigation">
-			<h2 class="title">
-				<span class="home">台北一日遊</span>
-				<div class="index_Btn">
-					<button id="bookingBtn" class="Btn">預定行程</button ><button class="Btn" id="memberPage" style.display="none;">會員中心</button><button class="Btn" id="userBtn">登入/註冊</button>
-				</div>
-			</h2>
-		</div>
-		<div class="navigation_placeholder"></div>
-		<div class="photoContainer"><img id="photo"/><input type="file" id="profilePhoto" accept="image/*" style="display:none;" class="Btn profilePhoto"></div>
-		<button type="submit" class="memberBtn" id="upload">上傳照片</button>
-		<div class="separator"></div>
-		
-		<div class="contactForm updateForm">
-			<div class="booking_title">會員個人資料</div>
-			<div class="booking_field"><span>會員姓名:</span><input class="booking_input" type="text" id="name"></div>
-			<div class="booking_field"><span>會員信箱:</span><input class="booking_input" type="text" id="email"></div>
-			<button class="memberBtn" type="button" id="updateBtn">更新會員資料</button>
-		</div>
-		<div class="separator"></div>
-		<!-- 歷史訂單 -->
-		<div class="contactForm" style="height:max-content" id="historyOrder">
-			<div class="booking_title">歷史訂單明細</div>
-		</div>
-	</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/static/styles.css" />
+    <title>Member Page</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="navigation">
+        <h2 class="title">
+          <span class="home">台北一日遊</span>
+          <div class="index_Btn">
+            <button id="bookingBtn" class="Btn">預定行程</button
+            ><button class="Btn" id="memberPage" style.display="none;">
+              會員中心</button
+            ><button class="Btn" id="userBtn">登入/註冊</button>
+          </div>
+        </h2>
+      </div>
+      <div class="navigation_placeholder"></div>
+      <div class="photoContainer">
+        <img id="photo" /><input
+          type="file"
+          id="profilePhoto"
+          accept="image/*"
+          style="display: none"
+          class="Btn profilePhoto" />
+      </div>
+      <button type="submit" class="memberBtn" id="upload">上傳照片</button>
+      <div class="separator"></div>
 
-	<div class="dialog_mask"></div>
-	<div class="footer"><div class="footer_text">COPYRIGHT © 2021 台北一日遊</div>
-	
-	<div id="dialog_signin" class="dialog frame_signin">
-	  <div class="decorator_bar"></div>
-	  <div  class="close_frame"><img src="/static/image/icon_close.png" id="closeSignin" class="close_icon"/></div>
-	  <div class="main_dialog main_signin">
-		<h3 class="h3_dialog">登入會員帳號</h3>
-		<form id="signinForm">
-		  <input name="email" type="email" placeholder="輸入電子信箱" id="signinEmail" class="input_frame line1"/>
-		  <input name="password" type="password" placeholder="輸入密碼" id="signinPassword" class="input_frame line2"/>
-		  <button type="button" id="signinBtn" class="btn_dialog btnLocation1">登入帳戶</button>
-		</form>
-		<span id="wantSignup" class="text_frame t1">還沒有帳戶？點此註冊</span>
-		<span id="signinResult" class="text_frame t4" style.display="none;"></span>
-	  </div>
-	</div>
-	<div  id="dialog_signup" class="dialog frame_signup">
-	  <div class="decorator_bar"></div>
-	  <div class="close_frame"><img src="/static/image/icon_close.png" id="closeSignup" class="close_icon"/></div>
-	  <div class="main_dialog main_signup">
-		<h3 class="h3_dialog">註冊會員帳號</h3>
-		<form id="signupForm">
-		  <input name="name" type="text" placeholder="輸入姓名" id="signupName" class="input_frame line1"/>
-		  <input name="email" type="email" placeholder="輸入電子信箱" id="signupEmail" class="input_frame line2"/>
-		  <input name="password" type="password" placeholder="輸入密碼" id="signupPassword" class="input_frame line3"/>
-		  <button type="button" id="signupBtn" class="btn_dialog btnLocation2">註冊新帳戶</button>
-		</form>
-		<span id="wantSignin" class="text_frame t2">已經有帳戶？點此登入</span>
-		<span id="signupResult" class="text_frame t3" style.display="none;"></span>
-	  </div>
-	</div>
-	<script type="module" src="\static\script_member.js"></script>
-  
-</body>
+      <div class="contactForm updateForm">
+        <div class="booking_title">會員個人資料</div>
+        <div class="booking_field">
+          <span>會員姓名:</span
+          ><input class="booking_input" type="text" id="name" />
+        </div>
+        <div class="booking_field">
+          <span>會員信箱:</span
+          ><input class="booking_input" type="text" id="email" />
+        </div>
+        <button class="memberBtn" type="button" id="updateBtn">
+          更新會員資料
+        </button>
+      </div>
+      <div class="separator"></div>
+      <!-- 歷史訂單 -->
+      <div class="contactForm" style="height: max-content" id="historyOrder">
+        <div class="booking_title">歷史訂單明細</div>
+      </div>
+    </div>
+
+    <div class="dialog_mask"></div>
+    <div class="footer">
+      <div class="footer_text">COPYRIGHT © 2021 台北一日遊</div>
+
+      <div id="dialog_signin" class="dialog frame_signin">
+        <div class="decorator_bar"></div>
+        <div class="close_frame">
+          <img
+            src="/static/image/icon_close.png"
+            id="closeSignin"
+            class="close_icon" />
+        </div>
+        <div class="main_dialog main_signin">
+          <h3 class="h3_dialog">登入會員帳號</h3>
+          <form id="signinForm">
+            <input
+              name="email"
+              type="email"
+              placeholder="輸入電子信箱"
+              id="signinEmail"
+              class="input_frame line1" />
+            <input
+              name="password"
+              type="password"
+              placeholder="輸入密碼"
+              id="signinPassword"
+              class="input_frame line2" />
+            <button
+              type="button"
+              id="signinBtn"
+              class="btn_dialog btnLocation1">
+              登入帳戶
+            </button>
+          </form>
+          <span id="wantSignup" class="text_frame t1"
+            >還沒有帳戶？點此註冊</span
+          >
+          <span
+            id="signinResult"
+            class="text_frame t4"
+            style.display="none;"></span>
+        </div>
+      </div>
+      <div id="dialog_signup" class="dialog frame_signup">
+        <div class="decorator_bar"></div>
+        <div class="close_frame">
+          <img
+            src="/static/image/icon_close.png"
+            id="closeSignup"
+            class="close_icon" />
+        </div>
+        <div class="main_dialog main_signup">
+          <h3 class="h3_dialog">註冊會員帳號</h3>
+          <form id="signupForm">
+            <input
+              name="name"
+              type="text"
+              placeholder="輸入姓名"
+              id="signupName"
+              class="input_frame line1" />
+            <input
+              name="email"
+              type="email"
+              placeholder="輸入電子信箱"
+              id="signupEmail"
+              class="input_frame line2" />
+            <input
+              name="password"
+              type="password"
+              placeholder="輸入密碼"
+              id="signupPassword"
+              class="input_frame line3" />
+            <button
+              type="button"
+              id="signupBtn"
+              class="btn_dialog btnLocation2">
+              註冊新帳戶
+            </button>
+          </form>
+          <span id="wantSignin" class="text_frame t2"
+            >已經有帳戶？點此登入</span
+          >
+          <span
+            id="signupResult"
+            class="text_frame t3"
+            style.display="none;"></span>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="\static\script_member.js"></script>
+  </body>
 </html>
