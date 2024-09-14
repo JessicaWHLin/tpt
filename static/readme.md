@@ -18,7 +18,7 @@ password:aa22@
 
 ### Search by attractions or MRT station
 
-![search](/upload/search.gif)
+![search](/upload/search2.gif)
 
 ## Tech Stack
 
