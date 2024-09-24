@@ -1,3 +1,5 @@
+document.querySelector("#signinEmail").value = "test@test.com";
+document.querySelector("#signinPassword").value = "t1234@";
 //選時間跳價錢
 let changeObsever = document.querySelector(".field_time");
 let morning = document.querySelector("#morning");

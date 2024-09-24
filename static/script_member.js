@@ -35,6 +35,7 @@ let email = document.querySelector("#email");
 let updateBtn = document.querySelector("#updateBtn");
 let photo = document.querySelector("#photo");
 let url_profile = "/api/profile";
+let background = document.querySelector(".photoContainer");
 const options = {
   method: "GET",
   headers: {
@@ -45,7 +46,8 @@ const options = {
 let profile = await getData(url_profile, options);
 if (profile.data[0] != null) {
   photo.src = profile.data[0];
-  photo.style.display = "block";
+  photo.style = "display :block";
+  background.style = "background:none";
 } else {
   photo.style.display = "none";
 }
@@ -71,7 +73,6 @@ updateBtn.addEventListener("click", async () => {
   localStorage.setItem("Token", updateInfo.Token);
   location.href = "/member";
 });
-
 //大頭照上傳
 let inputBtn = document.querySelector("#profilePhoto");
 let upload = document.querySelector("#upload");
@@ -93,17 +94,10 @@ inputBtn.addEventListener("change", async (event) => {
     let uploadPhoto = await getData(url, options);
     console.log("uploadPhoto= ", uploadPhoto);
     photo.src = `${uploadPhoto.url}`;
-    photo.style.display = "block";
+    photo.style = "display:block";
   }
 });
-const titles = [
-  "訂單編號",
-  "景點名稱",
-  "預定日期",
-  "預定時間",
-  "行程費用",
-  "付款狀態",
-];
+const titles = ["訂單編號", "景點名稱", "預定日期", "預定時間", "行程費用", "付款狀態"];
 class Order {
   constructor(containerclass) {
     this.container = document.querySelector(containerclass);

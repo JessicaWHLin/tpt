@@ -140,5 +140,4 @@ cython_debug/
 # macOS
 .DS_Store
 
-# Ignore .env file
-key.env
+

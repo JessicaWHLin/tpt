@@ -23,7 +23,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/upload", StaticFiles(directory="upload"), name="upload")
 get_data()
 pool=get_mysql_connection()
-load_dotenv("key.env")
+load_dotenv(".env")
 VENDER_CODE=os.getenv("VENDER_CODE")
 API_KEY=os.getenv("API_KEY")
 

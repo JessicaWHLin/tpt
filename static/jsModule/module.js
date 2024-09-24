@@ -103,11 +103,12 @@ export function Signup() {
 export function Signin(url) {
   document.querySelector("#signinBtn").addEventListener("click", (e) => {
     let email = document.querySelector("#signinEmail");
-    let passowrd = document.querySelector("#signinPassword");
+    let password = document.querySelector("#signinPassword");
+
     if (!email.value) {
       e.preventDefault();
       alert("請輸入電子信箱");
-    } else if (!passowrd.value) {
+    } else if (!password.value) {
       e.preventDefault();
       alert("請輸入密碼");
     } else {
@@ -188,7 +189,6 @@ export async function CheckAuth_WithToken() {
         return response.json();
       })
       .then((data) => {
-        // console.log("user=",data.data);
         if (data.data) {
           let signinBigBtn = document.querySelector("#userBtn");
           signinBigBtn.textContent = "登出系統";
