@@ -121,7 +121,7 @@ class bookingModel:
 				cursor=connection9.cursor()
 				
 				current_date = datetime.now().strftime("%Y%m%d%H%M%S")
-				order_number=f"{current_date}{user["data"]["id"]}"
+				order_number=f"{current_date}{user['data']['id']}"
 				sql_record="""
 					insert into orders(attractionId,userId,amount,bookingDate,bookingTime,contact_name,
 					contact_email,contact_phone,order_number)values(%s,%s,%s,%s,%s,%s,%s,%s,%s) 

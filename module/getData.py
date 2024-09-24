@@ -4,7 +4,10 @@ import json
 import os
 import re
 from mysql.connector import Error
-# db={}
+from dotenv import load_dotenv
+load_dotenv(".env")
+
+
 def get_mysql_connection():
 	# 從環境變數中獲取 MySQL 連接參數
 	host = os.getenv('MYSQL_HOST')
@@ -23,9 +26,9 @@ def get_mysql_connection():
 		**db
 	)
 	return pool
+
 def get_data():
 	pool=get_mysql_connection()
-
 	current_path=os.getcwd()
 	f_path=os.path.join(current_path,'data','taipei-attractions.json')
 	with open(f_path, mode="r",encoding='utf-8') as f:

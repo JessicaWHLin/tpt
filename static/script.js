@@ -1,3 +1,5 @@
+document.querySelector("#signinEmail").value = "test@test.com";
+document.querySelector("#signinPassword").value = "t1234@";
 // list bar
 //點擊mrt list→跳搜尋框
 let url_mrt = "/api/mrts";
@@ -141,9 +143,7 @@ function load_attractions_more(page, keyword = "") {
   let callback = (entries, observer) => {
     if (entries[0].isIntersecting && !isloading) {
       isloading = true;
-      let url = `api/attractions?page=${page}${
-        keyword ? `&keyword=${keyword}` : ""
-      }`;
+      let url = `api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ""}`;
       fetch(url, { page: page, keyword: keyword })
         .then((e) => {
           return e.json();
@@ -174,9 +174,7 @@ function load_attractions_more(page, keyword = "") {
 
 function query(keyword) {
   let page = 0;
-  let url = `api/attractions?page=${page}${
-    keyword ? `&keyword=${keyword}` : ""
-  }`;
+  let url = `api/attractions?page=${page}${keyword ? `&keyword=${keyword}` : ""}`;
   fetch(url, { page: page, keyword: keyword })
     .then((e) => {
       return e.json();
